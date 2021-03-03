@@ -2,10 +2,14 @@
 Wordpress Plugin intended to simplify data migration from WooCommerce to Shopware 6.x 
 
 ## Installation
-If your Wordpress & WooCommerce site is Composer driven you can simply run 
+If your Wordpress & WooCommerce site is Composer driven you can simply run
+
 ```composer require vardumper/shopware-six-exporter``` 
-or 
-```composer require wpackagist-plugin/shopware-six-exporter``` and then activate the plugin.
+
+or
+
+```composer require wpackagist-plugin/shopware-six-exporter``` 
+and then activate the plugin.
 Alternatively, download the zip, upload and extract it to your `wp-content/plugins` folder and activate the plugin.
 
 ## Requirements
@@ -14,7 +18,8 @@ Alternatively, download the zip, upload and extract it to your `wp-content/plugi
 
 ## Plugin Features
 * This plugin generates importable .csv files of your WooCommerce online stores' most important entities (such as customers, products and orders) for later import into Shopware 6. 
-* It allows you to sanitize content
+* Fake customer emails to prevent accidential
+* Prevents auto increment ID collisions when importing from multiple WooCommerce stores. 
 * It allows you to map countries, sales channels, payment methods to the corresponding Shopware Uuids.
 * Filters allow you to modify each csv column to your needs. You can and should use these to extend mappings, or retrieve more entity data. 
 * Complete Shopware Import/Export Profiles are included.
