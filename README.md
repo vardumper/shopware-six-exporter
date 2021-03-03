@@ -2,7 +2,10 @@
 Wordpress Plugin intended to simplify data migration from WooCommerce to Shopware 6.x 
 
 ## Installation
-If your Wordpress & WooCommerce site is Composer driven you can simply run `composer require vardumper/shopware-six-exporter` or `wpackagist-plugin/shopware-six-exporter` and then activate the plugin.
+If your Wordpress & WooCommerce site is Composer driven you can simply run 
+```composer require vardumper/shopware-six-exporter``` 
+or 
+```composer require wpackagist-plugin/shopware-six-exporter``` and then activate the plugin.
 Alternatively, download the zip, upload and extract it to your `wp-content/plugins` folder and activate the plugin.
 
 ## Requirements
