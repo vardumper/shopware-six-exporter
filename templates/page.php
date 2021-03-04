@@ -2,7 +2,7 @@
 
 use vardumper\Shopware_Six_Exporter\Plugin;
 ?>
-<div class="wrap" id="sw6export">
+<div class="wrap" id="shopware-six-exporter">
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
     <div class="notice notice-success"><p>Settings saved.</p></div>
     <?php } ?>
@@ -22,16 +22,7 @@ use vardumper\Shopware_Six_Exporter\Plugin;
         <a href="#preview" data-id="preview" class="nav-tab">Preview Data</a>
         <a href="#export" data-id="export" class="nav-tab">Export</a>
     </h2>
-    <script type="text/javascript">jQuery(document).ready(function(){
-        jQuery('#sw6export a.nav-tab').click(function(e){
-            e.preventDefault();
-            jQuery(this).parent().find('a').removeClass('nav-tab-active');
-            jQuery(this).addClass('nav-tab-active');
-            jQuery('.content-tab').removeAttr('hidden').hide();
-            jQuery(document.getElementById(jQuery(this).attr('data-id'))).show();
-        });
-    });</script>
-    <style>input[type='text'] { font:Monaco,monospace,monospaced; }</style>
+    
     <div class="content-tab" id="settings">
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
             <fieldset>
