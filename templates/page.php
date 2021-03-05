@@ -7,15 +7,7 @@ use vardumper\Shopware_Six_Exporter\Plugin;
     <div class="notice notice-success"><p>Settings saved.</p></div>
     <?php } ?>
     <h1 class="wp-heading-inline">Wordpress & WooCommerce Export for Shopware 6</h1>
-    <p>This plugin helps you creates importable CSV files for the most important entities like Customers, Guest Users, Products and Order History.</p>
-    <h2>How to use this plugin:</h2>
-    <ol class="ol-decimal">
-        <li>Download the corresponding profile for the entity you want to import. Add it to your Shopware Database via MySQL.</li>
-        <li>Now add the necessary Shopware Uuid's (for country, languages, salutations, sales-channels) and save them.</li>
-        <li>Click "Export" to generate your .CSV</li>
-    </ol>
-    <p>If you need to do more advanced country to sales channel mappings, you can do that too by using this plugins <samp>get_shopware_six_sales_channel_by_billing_country($country)</samp> filter. Read about it in the documentation under advanced mappings.</p>
-
+    <p>This plugin exports your customer, product and order data files for the most important entities like Customers, Guest Users, Products and Order History.</p>
     <h2 class="nav-tab-wrapper wp-clearfix">
         <a href="#settings" data-id="settings" class="nav-tab nav-tab-active">Settings</a>
         <a href="#profiles" data-id="profiles" class="nav-tab">Shopware Import/Export Profiles</a>
@@ -157,15 +149,39 @@ use vardumper\Shopware_Six_Exporter\Plugin;
             </tbody>
         </table>
     </div>
+    <div class="content-tab" id="preview" hidden="hidden">
+        <p>Not implemented yet. You will be able to preview single datasets here, before initiating the full export.</p>
+        <table class="form-table" role="presentation">
+            <tbody>
+                <tr>
+                    <th scope="row"></th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     <div class="content-tab" id="export" hidden="hidden">
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>&download_csv" method="post">
             <fieldset>
                 <table class="form-table" role="presentation">
                     <tbody>
                         <tr>
+                            <th scope="row">Customer Export</th>
+                            <td>
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Customers" />&nbsp;<input name="action" class="button button-primary button-large disabled" title="not implemented yet" type="submit" value="Export Guests" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            
+            <fieldset>
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
                             <th scope="row">Product Export</th>
                             <td>
-                                <input name="action" class="button button-primary" type="submit" value="Export Products" />
+                                <input name="action" class="button button-primary button-large disabled" title="not implemented yet" type="submit" value="Export Products" />
                             </td>
                         </tr>
                     </tbody>
@@ -178,20 +194,7 @@ use vardumper\Shopware_Six_Exporter\Plugin;
                         <tr>
                             <th scope="row">Order Export</th>
                             <td>
-                                <input name="action" class="button button-primary" type="submit" value="Export Orders" />
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-    
-            <fieldset>
-                <table class="form-table" role="presentation">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Customer Export</th>
-                            <td>
-                                <input name="action" class="button button-primary button-large" type="submit" value="Export Customers" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Guests" />
+                                <input name="action" class="button button-primary button-large disabled" type="submit" title="not implemented yet" value="Export Orders" />
                             </td>
                         </tr>
                     </tbody>
@@ -199,5 +202,16 @@ use vardumper\Shopware_Six_Exporter\Plugin;
             </fieldset>
         </form>
     </div>
+    <hr />
+    <h2>How to use this plugin?</h2>
+    <ol class="ol-decimal">
+        <li>If you don't want to loose your customers login credential during migration to Shopware, please install <a href="https://github.com/vardumper/wordpress-password-encoder-for-shopware-six">Wordpress Legacy Password Encoder for Shopware 6</a> in the Shopware installation you're importing into.</li>
+        <li>Download the Import/Export profiles and add them to your Shopware MySQL database. It's simpler and faster but you could also create these profiles in the Shopware Backend manually. Thes profiles provided here are based on the Shopware documentation and include all available columns.</li>
+        <li>Configure this plugin by opening the settings tab and entering the desired Shopware Uuid's (for countries, sales channels, salutations, languages and so on...) and save them.</li>
+        <li>Preview the resulting data and start exporting.</li>
+        <li>Finally you can start importing in Shopware</li> 
+    </ol>
     
+    <h2>Advanced mappings</h2>
+    <p>This plugin provides a lot of filters which allow you to manipulate each and every table cells' content before the final CSV is generated. One example: if you want to assign customers with different billing countries to individual sales channels, you can do that with filters. Browse some advanced sanitization and mapping examples in the <a href="">plugin documentation</a>.</p>
 </div>
