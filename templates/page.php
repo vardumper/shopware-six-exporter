@@ -174,13 +174,26 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
     </div>
     <div class="content-tab" id="preview" hidden="hidden">
         <h2>Preview Data</h2>
+        <p>This pages shows you how your final CSV would look like if you export your data with your currently saved settings. It simply picks some random customers/products/orders. This is supposed to help you validate the output before starting a lengthy export. Reload this page to see a differet set of customer/product/order.</p>
         <h3>Customer</h3>
-        <table class="form-table" role="presentation">
+        <table class="form-table preview" role="presentation">
+            <thead>
+                <tr>
+                    <th>Column</th>
+                    <th>Customer 1</th>
+                    <th>Customer 2</th>
+                    <th>Customer 3</th>
+                </tr>
+            </thead>
             <tbody>
-                <?php foreach(ExportCustomers::getHeaders() as $name) { ?>
+                <?php 
+                $customers = ExportCustomers::getRecords(true);
+                foreach(ExportCustomers::getHeaders() as $name) { ?>
                     <tr>
                         <th style="text-align:right;"><?php echo $name; ?></th>
-                        <td></td>
+                        <td><?php echo $customers[0][$name]; ?></td>
+                        <td><?php echo isset($customers[1]) ?? $customers[1][$name]; ?></td>
+                        <td><?php echo isset($customers[2]) ?? $customers[2][$name]; ?></td>
                     </tr>
                 <?php } ?>
             </tbody>

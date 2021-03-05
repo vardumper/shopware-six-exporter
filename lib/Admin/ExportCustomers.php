@@ -39,7 +39,7 @@ class ExportCustomers {
         $headers = $this->getHeaders();
         $this->csv->insertOne($headers);
         
-        $records = $this->getRecords();
+        $records = self::getRecords();
         
         $this->csv->insertAll($records);
     }
@@ -49,7 +49,7 @@ class ExportCustomers {
         return $this->csv->getContent();
     }
     
-    private function getRecords() : array 
+    public static function getRecords(bool $random = false) : array 
     {
         error_reporting(E_ALL);
         ini_set('display_errors', '1');
@@ -58,7 +58,7 @@ class ExportCustomers {
         
         $settings = json_decode(get_option(Plugin::SETTINGS_KEY), true);
         
-        $defaults = $this->getDefaults();
+        $defaults = self::getDefaults();
         $query = sprintf("SELECT u.ID     AS `ID`,
 	   MAX( CASE WHEN um.meta_key = 'customer_nr' and u.ID = um.user_id THEN um.meta_value END ) as `customerNumber`,
        MAX( CASE WHEN um.meta_key = 'shopware_exporter_random_id' and u.ID = um.user_id THEN um.meta_value END ) as `autoIncrement`,
@@ -112,9 +112,33 @@ FROM   wp_users u
         ON (u.ID = bill_title.user_id AND bill_title.meta_key = 'billing_title')
        LEFT JOIN wp_usermeta as ship_title 
         ON (u.ID = ship_title.user_id AND ship_title.meta_key = 'shipping_title')
-GROUP  BY u.ID 
-ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['customerSalutationIdMale'], $settings['customerSalutationIdUnknown'], $settings['customerSalutationIdFemale'], $settings['customerSalutationIdMale'], $settings['customerSalutationIdUnknown']);
-//         var_dump($query);die;
+        %s
+GROUP BY u.ID 
+ORDER BY u.ID ASC
+%s;", 
+            $settings['customerSalutationIdFemale'], 
+            $settings['customerSalutationIdMale'], 
+            $settings['customerSalutationIdUnknown'], 
+            $settings['customerSalutationIdFemale'], 
+            $settings['customerSalutationIdMale'], 
+            $settings['customerSalutationIdUnknown'],
+            $random ? " JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM wp_users)) AS id) AS u2 WHERE u.ID >= u2.ID " : "",
+            $random ? " LIMIT 3 " : ""
+        );
+        
+        /**
+         * SELECT user_email
+  FROM wp_users AS r1 JOIN
+       (SELECT CEIL(RAND() *
+                     (SELECT MAX(id)
+                        FROM wp_users)) AS id)
+        AS r2
+ WHERE r1.id >= r2.id
+ ORDER BY r1.id ASC
+ LIMIT 1
+         * @var Ambiguous $results
+         */
+        
         $results = $wpdb->get_results($query, ARRAY_A);
         
         /**
@@ -194,10 +218,10 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
             $tmp['defaultShippingAddress.street']       = trim(ucwords(strtolower((string)$tmp['defaultShippingAddress.street'])));
             $tmp['defaultShippingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $tmp['defaultShippingAddress.additionalAddressLine1']));
             $tmp['defaultShippingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultShippingAddress.additionalAddressLine2']));
-            $tmp['defaultShippingAddress.countryId']    = !empty($tmp['defaultShippingAddress.country']) ? $this->getCountryIdByIsoCode($tmp['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
+            $tmp['defaultShippingAddress.countryId']    = !empty($tmp['defaultShippingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
             
             // edge case: remove serialized stuff
-            $tmp['defaultBillingAddress.company']       = ($this->isSerialized($tmp['defaultBillingAddress.company'])) ? '' : ucwords(strtolower((string) $tmp['defaultBillingAddress.company']));
+            $tmp['defaultBillingAddress.company']       = (self::isSerialized($tmp['defaultBillingAddress.company'])) ? '' : ucwords(strtolower((string) $tmp['defaultBillingAddress.company']));
             
             $tmp['defaultBillingAddress.firstName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.firstName']))));
             $tmp['defaultBillingAddress.lastName']      = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.lastName']))));
@@ -205,10 +229,10 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
             $tmp['defaultBillingAddress.street']        = trim(ucwords(strtolower((string) $tmp['defaultBillingAddress.street'])));
             $tmp['defaultBillingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine1']));
             $tmp['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine2']));
-            $tmp['defaultBillingAddress.countryId']     = !empty($tmp['defaultBillingAddress.country']) ? $this->getCountryIdByIsoCode($tmp['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
+            $tmp['defaultBillingAddress.countryId']     = !empty($tmp['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
             
-            $tmp['boundSalesChannelId']                 = $this->getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
-            $tmp['salesChannelId']                      = $this->getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
+            $tmp['boundSalesChannelId']                 = self::getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
+            $tmp['salesChannelId']                      = self::getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
             $tmp['salutationId']                        = $tmp['defaultBillingAddress.salutationId'];
             
             // edge case: missing salutation on adresses
@@ -228,7 +252,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         $r = [];
         foreach ($results as $customer) {
             $c = [];
-            foreach($this->getHeaders() as $key) {
+            foreach(self::getHeaders() as $key) {
                 $c[$key] = $defaults[$key];
                 if (isset($customer[$key]) && !empty($customer[$key])) {
                     $c[$key] = $customer[$key];
@@ -240,7 +264,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         return  $r;
     }
     
-    private function isSerialized(?string $string) : bool 
+    public static function isSerialized(?string $string) : bool 
     {
         if (is_null($string)) {
             return false;
@@ -248,7 +272,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         return ($string == 'b:0;' || @unserialize($string) !== false);
     }
     
-    private function isJson(?string $string) : bool
+    public static function isJson(?string $string) : bool
     {
         if (is_null($string)) {
             return false;
@@ -260,7 +284,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
-    private function getCountryIdByIsoCode(string $iso_code) : string
+    public static function getCountryIdByIsoCode(string $iso_code) : string
     {
         switch ($iso_code) {
             case 'CH':
@@ -305,7 +329,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         }
     }
     
-    private function getSalesChannelIdByCountry(string $iso_code) : string
+    public static function getSalesChannelIdByCountry(string $iso_code) : string
     {
         switch ($iso_code) {
             case 'BE':

@@ -2,4 +2,5 @@
  * All of the CSS for your dashboard-specific functionality should be
  * included in this file.
  */
- #shopware-six-exporter #settings input[type='text'] { font-family: Monaco,monospace; }
+#shopware-six-exporter #settings input[type='text'] { font-family: Monaco,monospace; }
+#shopware-six-exporter table.preview td { font-family: Monaco,monospace; }
