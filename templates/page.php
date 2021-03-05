@@ -1,6 +1,7 @@
 <?php declare(strict_types = 1);
 
 use vardumper\Shopware_Six_Exporter\Plugin;
+use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
 ?>
 <div class="wrap" id="shopware-six-exporter">
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
@@ -173,13 +174,15 @@ use vardumper\Shopware_Six_Exporter\Plugin;
     </div>
     <div class="content-tab" id="preview" hidden="hidden">
         <h2>Preview Data</h2>
-        <p>Not implemented yet. You will be able to preview single datasets here, before initiating the full export.</p>
+        <h3>Customer</h3>
         <table class="form-table" role="presentation">
             <tbody>
-                <tr>
-                    <th scope="row"></th>
-                    <td></td>
-                </tr>
+                <?php foreach(ExportCustomers::getHeaders() as $name) { ?>
+                    <tr>
+                        <th style="text-align:right;"><?php echo $name; ?></th>
+                        <td></td>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
     </div>

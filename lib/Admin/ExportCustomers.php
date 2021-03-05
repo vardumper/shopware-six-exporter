@@ -344,7 +344,7 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         return null;
     }
     
-    private function getDefaults() : array
+    private static function getDefaults() : array
     {
         $options = json_decode(get_option(Plugin::SETTINGS_KEY), true);
         $host = parse_url(get_bloginfo('url'), PHP_URL_HOST);
@@ -445,8 +445,8 @@ ORDER  BY u.ID DESC;", $settings['customerSalutationIdFemale'], $settings['custo
         ];
     }
     
-    private function getHeaders() : array 
+    public static function getHeaders() : array 
     {
-        return array_keys($this->getDefaults());
+        return array_keys(self::getDefaults());
     }
 }
