@@ -11,7 +11,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         <div style="display:inline-block;float:right;height:50px;width:150px;background:url(<?php echo plugin_dir_url(__DIR__) ?>assets/woocommerce-logo.svg);background-position: center;background-repeat: no-repeat;background-size: cover;"></div>
     </h1>
     <p>
-        This plugin exports your customer, product and order data files for the most important entities like Customers, Guest Users, Products and Order History.
+        This plugin helps you export your customer, product and order data in a ready-to-import format supported by Shopware.
     </p>
     <span style="clear:both;"></span>
     <h2 class="nav-tab-wrapper wp-clearfix">

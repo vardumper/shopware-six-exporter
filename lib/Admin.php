@@ -92,13 +92,27 @@ class Admin {
     
     public function admin_menu()
     {
-        add_options_page(
+        /**
+        add_menu_page( 
+            'Custom Menu Page Title', 
+            'Custom Menu Page', 
+            'manage_options', 
+            'custom.php', 
+            '', 
+            
+            90
+        );
+        **/
+        add_menu_page(
             __('Shopware Export', 'shopware-six-exporter'),
             __('Shopware Export', 'shopware-six-exporter'),
             'manage_options',
             'shopware-six-exporter',
-            [ $this, 'showPage' ]
+            [ $this, 'showPage' ],
+            plugin_dir_url(__DIR__) . 'assets/shopware-icon.svg', 
+            90
             );
+        
     }
     
     public function showPage() : void

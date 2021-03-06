@@ -4,3 +4,7 @@
  */
 #shopware-six-exporter #settings input[type='text'] { font-family: Monaco,monospace; }
 #shopware-six-exporter table.preview td { font-family: Monaco,monospace; }
+li.toplevel_page_shopware-six-exporter img {
+    padding: 0 0 0 0!important;
+    opacity:.6
+}
