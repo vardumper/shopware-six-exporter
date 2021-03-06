@@ -130,46 +130,9 @@ class ExportCustomers {
          */
         $r = [];
         foreach($results as $result) {
-            $user_id = (int) $result['ID'];
-            
             $tmp = $result;
-            
-            // if billing address doesn't have a first/last name, copy it over from customer
-            if (empty($tmp['defaultBillingAddress.firstName'])) {
-                $tmp['defaultBillingAddress.firstName'] = $tmp['firstName'];
-            }
-            if (empty($tmp['defaultBillingAddress.lastName'])) {
-                $tmp['defaultBillingAddress.lastName'] = $tmp['lastName'];
-            }
-            // if shipping address doesn't have a first/last name, copy it over from customer
-            if (empty($tmp['defaultShippingAddress.firstName'])) {
-                $tmp['defaultShippingAddress.firstName'] = $tmp['firstName'];
-            }
-            if (empty($tmp['defaultShippingAddress.lastName'])) {
-                $tmp['defaultShippingAddress.lastName'] = $tmp['lastName'];
-            }
-            
-            // edge case: billing name set, but missing in customer
-            if (empty($tmp['firstName']) && !empty($tmp['defaultBillingAddress.firstName'])) {
-                $tmp['firstName'] = $tmp['defaultBillingAddress.firstName'];
-            }
-            if (empty($tmp['lastName']) && !empty($tmp['defaultBillingAddress.lastName'])) {
-                $tmp['lastName'] = $tmp['defaultBillingAddress.lastName'];
-            }
-            // edge case: customer nr is empty
-            if (empty($tmp['customerNumber'])) {
-                // on some sites we set the user login to be the customer nr (with one leading letter, so if the rest is a digit use this one)
-                if (ctype_digit(substr($tmp['userLogin'],1))) {
-                    $tmp['customerNumber'] = $tmp['userLogin'];
-                } else {
-                    // fallback, re-generate a customer nr
-                    if (function_exists('create_customer_nr_by_id')) {
-                        $tmp['customerNumber'] = \create_customer_nr_by_id($tmp['ID']);
-                    }
-                }
-            }
-            
-            // edge case: missing or incomplete shipping address/copy over billing address
+
+            // edge case: missing or incomplete shipping address -> copy over billing address
             if ( empty($tmp['defaultShippingAddress.city']) || empty($tmp['defaultShippingAddress.street']) ) {
                 $tmp['defaultShippingAddress.firstName']                = $tmp['defaultBillingAddress.firstName'];
                 $tmp['defaultShippingAddress.lastName']                 = $tmp['defaultBillingAddress.lastName'];
@@ -183,7 +146,7 @@ class ExportCustomers {
                 $tmp['defaultShippingAddress.additionalAddressLine1']   = $tmp['defaultBillingAddress.additionalAddressLine1'];
                 $tmp['defaultShippingAddress.additionalAddressLine2']   = $tmp['defaultBillingAddress.additionalAddressLine2'];
             }
-            
+
             $tmp['defaultShippingAddress.firstName']    = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultShippingAddress.firstName']))));
             $tmp['defaultShippingAddress.lastName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultShippingAddress.lastName']))));
             $tmp['defaultShippingAddress.city']         = trim(ucwords(strtolower((string)$tmp['defaultShippingAddress.city'])));
@@ -213,6 +176,7 @@ class ExportCustomers {
          */
         $r = [];
         foreach ($results as $customer) {
+            $user_id = (int) $customer['ID'];
             $c = [];
             foreach(self::getHeaders() as $key) {
                 // we want to apply filters on both: results from db & those keys not set in intial db query

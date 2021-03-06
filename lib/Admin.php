@@ -138,6 +138,9 @@ class Admin {
     
     public function filter_customer_company($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value) && !empty($row['defaultBillingAddress.company'])) {
+            return $row['defaultBillingAddress.company'];
+        }
         return $value;
     }
     
@@ -159,6 +162,11 @@ class Admin {
     
     public function filter_customer_customerNumber($value, int $user_id, array $row, $default = null) : ?string
     {
+        // edge case: customer nr is empty
+        if (empty($value)) {
+            // on some sites we set the user login to be the customer nr (with one leading letter, so if the rest is a digit use this one)
+            return (string) $user_id;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_city($value, int $user_id, array $row, $default = null) : ?string
@@ -444,6 +452,9 @@ class Admin {
     
     public function filter_customer_firstName($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value) && !empty($row['defaultBillingAddress.firstName'])) {
+            $value = $row['defaultBillingAddress.firstName'];
+        }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
     
@@ -485,6 +496,9 @@ class Admin {
     
     public function filter_customer_lastName($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value) && !empty($row['defaultBillingAddress.lastName'])) {
+            $value = $row['defaultBillingAddress.lastName'];
+        }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
     
