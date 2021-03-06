@@ -73,85 +73,55 @@ class ExportCustomers {
         $settings = json_decode(get_option(Plugin::SETTINGS_KEY), true);
         
         $defaults = self::getDefaults();
-        $query = sprintf("SELECT u.ID     AS `ID`,
-	   MAX( CASE WHEN um.meta_key = 'customer_nr' and u.ID = um.user_id THEN um.meta_value END ) as `customerNumber`,
-       MAX( CASE WHEN um.meta_key = 'shopware_exporter_random_id' and u.ID = um.user_id THEN um.meta_value END ) as `autoIncrement`,
-       MAX( CASE WHEN um.meta_key = 'first_name' and u.ID = um.user_id THEN um.meta_value END ) as `firstName`,
-	   MAX( CASE WHEN um.meta_key = 'last_name' and u.ID = um.user_id THEN um.meta_value END ) as `lastName`,
-	   MAX( CASE WHEN um.meta_key = 'last_update' and u.ID = um.user_id THEN FROM_UNIXTIME(um.meta_value) END ) as`updatedAt`,
-	   MAX( CASE WHEN um.meta_key = 'wc_last_active' and u.ID = um.user_id THEN FROM_UNIXTIME(um.meta_value) END ) as `lastLogin`,
-	   MAX( CASE WHEN um.meta_key = 'billing_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.additionalAddressLine1`,
-	   MAX( CASE WHEN um.meta_key = 'billing_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.additionalAddressLine2`,
-	   MAX( CASE WHEN um.meta_key = 'billing_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.city`,
-	   MAX( CASE WHEN um.meta_key = 'billing_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.company`,
-	   MAX( CASE WHEN um.meta_key = 'billing_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.country`,
-	   MAX( CASE WHEN um.meta_key = 'billing_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.countryState`,
-	   MAX( CASE WHEN um.meta_key = 'billing_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.firstName`,
-	   MAX( CASE WHEN um.meta_key = 'billing_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.lastName`,
-	   MAX( CASE WHEN um.meta_key = 'billing_phone' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.phoneNumber`,
-	   MAX(CASE 
-         WHEN bill_title.meta_value = '2' THEN '%s' 
-         WHEN bill_title.meta_value = '1' THEN '%s' 
-         ELSE '%s' 
-       END) AS `defaultBillingAddress.salutationId`,
-	   MAX( CASE WHEN um.meta_key = 'billing_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.street`,
-	   MAX( CASE WHEN um.meta_key = 'billing_postcode' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.zipcode`,
-       MAX( CASE WHEN um.meta_key = 'shipping_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.additionalAddressLine1`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.additionalAddressLine2`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.city`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.company`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.country`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.countryState`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.firstName`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.lastName`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_phone' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.phoneNumber`,
-	   MAX(CASE 
-         WHEN ship_title.meta_value = '2' THEN '%s' 
-         WHEN ship_title.meta_value = '1' THEN '%s' 
-         ELSE '%s' 
-	   END) AS `defaultShippingAddress.salutationId`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.street`,
-	   MAX( CASE WHEN um.meta_key = 'shipping_postcode' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.zipcode`,
-	   1 AS `doubleOptInRegistration`,
-       0 AS `guest`,
-       u.user_registered AS `firstLogin`,
-       u.user_registered AS `createdAt`,
-       LOWER(u.user_email) AS `email`,
-       u.user_pass AS `legacyPassword`,
-       u.user_login AS `userLogin`
-FROM   wp_users u 
-       JOIN wp_usermeta um 
-         ON u.ID = um.user_id 
-       LEFT JOIN wp_usermeta as bill_title 
-        ON (u.ID = bill_title.user_id AND bill_title.meta_key = 'billing_title')
-       LEFT JOIN wp_usermeta as ship_title 
-        ON (u.ID = ship_title.user_id AND ship_title.meta_key = 'shipping_title')
-        %s
-GROUP BY u.ID 
-ORDER BY u.ID ASC
-%s;", 
-            $settings['customerSalutationIdFemale'], 
-            $settings['customerSalutationIdMale'], 
-            $settings['customerSalutationIdUnknown'], 
-            $settings['customerSalutationIdFemale'], 
-            $settings['customerSalutationIdMale'], 
-            $settings['customerSalutationIdUnknown'],
+        $query = sprintf("SELECT 
+                   u.ID     AS `ID`,
+                   MAX( CASE WHEN um.meta_key = 'customer_nr' and u.ID = um.user_id THEN um.meta_value END ) as `customerNumber`,
+                   MAX( CASE WHEN um.meta_key = 'shopware_exporter_random_id' and u.ID = um.user_id THEN um.meta_value END ) as `autoIncrement`,
+                   MAX( CASE WHEN um.meta_key = 'first_name' and u.ID = um.user_id THEN um.meta_value END ) as `firstName`,
+                   MAX( CASE WHEN um.meta_key = 'last_name' and u.ID = um.user_id THEN um.meta_value END ) as `lastName`,
+                   MAX( CASE WHEN um.meta_key = 'last_update' and u.ID = um.user_id THEN FROM_UNIXTIME(um.meta_value) END ) as`updatedAt`,
+                   MAX( CASE WHEN um.meta_key = 'wc_last_active' and u.ID = um.user_id THEN FROM_UNIXTIME(um.meta_value) END ) as `lastLogin`,
+                   MAX( CASE WHEN um.meta_key = 'billing_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.additionalAddressLine1`,
+                   MAX( CASE WHEN um.meta_key = 'billing_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.additionalAddressLine2`,
+                   MAX( CASE WHEN um.meta_key = 'billing_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.city`,
+                   MAX( CASE WHEN um.meta_key = 'billing_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.company`,
+                   MAX( CASE WHEN um.meta_key = 'billing_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.country`,
+                   MAX( CASE WHEN um.meta_key = 'billing_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.countryStateId`,
+                   MAX( CASE WHEN um.meta_key = 'billing_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.firstName`,
+                   MAX( CASE WHEN um.meta_key = 'billing_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.lastName`,
+                   MAX( CASE WHEN um.meta_key = 'billing_phone' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.phoneNumber`,
+                   MAX( CASE WHEN um.meta_key = 'billing_title' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.salutationId`,
+                   MAX( CASE WHEN um.meta_key = 'billing_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.street`,
+                   MAX( CASE WHEN um.meta_key = 'billing_postcode' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.zipcode`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.additionalAddressLine1`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.additionalAddressLine2`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.city`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.company`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.country`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.countryStateId`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.firstName`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.lastName`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_phone' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.phoneNumber`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_title' and u.ID = um.user_id THEN um.meta_value END ) AS `defaultShippingAddress.salutationId`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_address_1' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.street`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_postcode' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.zipcode`,
+                   1 AS `doubleOptInRegistration`,
+                   0 AS `guest`,
+                   u.user_registered AS `firstLogin`,
+                   u.user_registered AS `createdAt`,
+                   u.user_email AS `email`,
+                   u.user_pass AS `legacyPassword`,
+                   u.user_login AS `userLogin`
+            FROM   wp_users u 
+                   JOIN wp_usermeta um 
+                     ON u.ID = um.user_id 
+                   %s
+            GROUP BY u.ID 
+            ORDER BY u.ID ASC
+            %s;",
             $random ? " JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM wp_users)) AS id) AS u2 WHERE u.ID >= u2.ID " : "",
             $random ? " LIMIT 3 " : ""
         );
-        
-        /**
-         * SELECT user_email
-  FROM wp_users AS r1 JOIN
-       (SELECT CEIL(RAND() *
-                     (SELECT MAX(id)
-                        FROM wp_users)) AS id)
-        AS r2
- WHERE r1.id >= r2.id
- ORDER BY r1.id ASC
- LIMIT 1
-         * @var Ambiguous $results
-         */
         
         $results = $wpdb->get_results($query, ARRAY_A);
         
@@ -162,21 +132,8 @@ ORDER BY u.ID ASC
         foreach($results as $result) {
             $user_id = (int) $result['ID'];
             
-            $fakeEmails = isset($settings['fakeEmails']) && $settings['fakeEmails'] === 'yes';
-            if ($fakeEmails) {
-                $result['email'] = md5($result['email']) . '@' . parse_url(get_bloginfo('url'), PHP_URL_HOST);
-            }
-            
-            // if prevent dups setting is off, do not populate autoIncrement field
-            $customerPreventDups = isset($settings['customerPreventDups']) && $settings['customerPreventDups'] === 'no';
-            if (!$customerPreventDups) {
-                unset($result['autoIncrement']); // overwrite the random id
-            }
-
             $tmp = $result;
-            // sanitize firstname/lastname
-            $tmp['firstName']   = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['firstName']))));
-            $tmp['lastName']    = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['lastName']))));
+            
             // if billing address doesn't have a first/last name, copy it over from customer
             if (empty($tmp['defaultBillingAddress.firstName'])) {
                 $tmp['defaultBillingAddress.firstName'] = $tmp['firstName'];
@@ -220,6 +177,7 @@ ORDER BY u.ID ASC
                 $tmp['defaultShippingAddress.zipcode']                  = $tmp['defaultBillingAddress.zipcode'];
                 $tmp['defaultShippingAddress.phoneNumber']              = $tmp['defaultBillingAddress.phoneNumber'];
                 $tmp['defaultShippingAddress.country']                  = $tmp['defaultBillingAddress.country'];
+                $tmp['defaultShippingAddress.countryStateId']           = $tmp['defaultBillingAddress.countryStateId'];
                 $tmp['defaultShippingAddress.company']                  = $tmp['defaultBillingAddress.company'];
                 $tmp['defaultShippingAddress.city']                     = $tmp['defaultBillingAddress.city'];
                 $tmp['defaultShippingAddress.additionalAddressLine1']   = $tmp['defaultBillingAddress.additionalAddressLine1'];
@@ -244,18 +202,7 @@ ORDER BY u.ID ASC
             $tmp['defaultBillingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine1']));
             $tmp['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine2']));
             $tmp['defaultBillingAddress.countryId']     = !empty($tmp['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
-            
-            $tmp['boundSalesChannelId']                 = apply_filters('customer_bound_sales_channel_id', (string) $tmp['defaultBillingAddress.country'], (int) $user_id, (string) $settings['customerDefaultSalesChannelId']);
-            $tmp['salesChannelId']                      = apply_filters('customer_sales_channel_id', (string) $tmp['defaultBillingAddress.country'], (int) $user_id, (string) $settings['customerDefaultSalesChannelId']);
             $tmp['salutationId']                        = $tmp['defaultBillingAddress.salutationId'];
-            
-            // edge case: missing salutation on adresses
-            if (empty($tmp['defaultShippingAddress.salutationId'])) {
-                $tmp['defaultShippingAddress.salutationId'] = $tmp['salutationId'];
-            }
-            if (empty($tmp['defaultBillingAddress.salutationId'])) {
-                $tmp['defaultBillingAddress.salutationId'] = $tmp['salutationId'];
-            }
             
           $r[] = $tmp;
         }
@@ -268,14 +215,12 @@ ORDER BY u.ID ASC
         foreach ($results as $customer) {
             $c = [];
             foreach(self::getHeaders() as $key) {
-                // set to default value
-                $c[$key] = $defaults[$key];
-                // set to database value
+                // we want to apply filters on both: results from db & those keys not set in intial db query
                 if (isset($customer[$key]) && !empty($customer[$key])) {
-                    $c[$key] = $customer[$key];
+                    $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), $customer[$key], $user_id, $customer, $defaults[$key]);
+                } else {
+                    $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), null, $user_id, $customer, $defaults[$key]); 
                 }
-                // apply filters
-                $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), $c[$key], $user_id, $result);
             }
             $r[] = $c;
         }

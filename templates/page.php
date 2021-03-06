@@ -8,7 +8,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
     <div class="notice notice-success"><p>Settings saved.</p></div>
     <?php } ?>
     <h1 class="wp-heading">Wordpress & WooCommerce Export for Shopware 6 <img style="float:right;" src="<?php echo plugin_dir_url(__DIR__) ?>assets/shopware-logo.svg" width="150" />
-        <div style="display:inline-block;float:right;height:50px;width:150px;background:url(<?php echo plugin_dir_url(__DIR__) ?>assets/woocommerce-logo.svg);background-position: center;background-repeat: no-repeat;background-size: cover;"></div>
+        <div style="display:inline-block;float:right;height:50px;width:165px;background:url(<?php echo plugin_dir_url(__DIR__) ?>assets/woocommerce-logo.svg);background-position: center;background-repeat: no-repeat;background-size: cover;"></div>
     </h1>
     <p>
         This plugin helps you export your customer, product and order data in a ready-to-import format supported by Shopware.
