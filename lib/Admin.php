@@ -99,9 +99,9 @@ class Admin {
         return $value;
     }
     
-    public function filter_customer_autoIncrement($value, int $user_id, array $row, int $default = null) : ?int
+    public function filter_customer_autoIncrement($value, int $user_id, array $row, int $default = null) : ?string
     {
-        return $value;
+        return (false === get_user_meta($user_id, 'shopware_exporter_random_id', true)) ? null : get_user_meta($user_id, 'shopware_exporter_random_id', true);
     }
     
     public function filter_customer_birthday($value, int $user_id, array $row, int $default = null) : ?string

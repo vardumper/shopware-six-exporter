@@ -44,7 +44,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">Default Customer Language ID</th>
+                                <th scope="row">Default Customer Group ID</th>
                                 <td>
                                     <input name="customerDefaultGroupId" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['customerDefaultGroupId']; ?>" />
                                 </td>
