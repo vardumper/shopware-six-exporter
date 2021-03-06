@@ -46,20 +46,20 @@ class Admin {
     public function __construct( Plugin $plugin ) {
         $this->plugin = $plugin;
         
-        if(isset($_GET['download_csv']))
+        if (isset($_GET['download_csv']))
         {
             switch ($_POST['action']) {
                 case 'Export Customers':
-                    $data = new ExportCustomers();
+                    $exporter = new ExportCustomers();
                     break;
                 case 'Export Guests':
-                    $data = new ExportGuests();
+                    $exporter = new ExportGuests();
                     break;
                 case 'Export Products':
-                    $data = new ExportProducts();
+                    $exporter = new ExportProducts();
                     break;
                 case 'Export Orders':
-                    $data = new ExportOrders();
+                    $exporter = new ExportOrders();
                     break;
                 default:
                     break;
@@ -73,11 +73,23 @@ class Admin {
             header("Content-Disposition: attachment; filename=\"shopware-six-". str_replace(' ', '-', strtolower($_POST['action'])) ."-".time().".csv\";" );
             header("Content-Transfer-Encoding: binary");
             
-            echo $data->getCsv();
+            echo $exporter->export()->getCsv();
             exit;
         }
     }
 
+    public function filter_customer_active($value, $user_id, $row, $default = 1) : int 
+    {
+        die('xxx');
+        return 0;
+    }
+    
+    public function filter_customer_id($value, $user_id, $row, $default = 1) : int
+    {
+        die('xxx');
+        return 0;
+    }
+    
     public function admin_menu()
     {
         add_options_page(
@@ -126,7 +138,6 @@ class Admin {
             }
         }
     }
-    
     
     /**
      * prevent duplicates by adding a random unique id

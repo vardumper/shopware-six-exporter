@@ -113,6 +113,93 @@ class Plugin {
         // add endpoints – in order to make csv download work
         $this->loader->add_filter('query_vars', $plugin_admin, 'query_vars', 10, 1);
         $this->loader->add_action('parse_request', $plugin_admin, 'parse_request');
+        
+        // customer filters
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_id', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_active', $plugin_admin, 'filter_customer_active', 10, 4);
+
+        /**
+        $this->loader->add_filter('filter_customer_affiliateCode
+        $this->loader->add_filter('filter_customer_autoIncrement
+        $this->loader->add_filter('filter_customer_birthday
+        $this->loader->add_filter('filter_customer_boundSalesChannelId
+        $this->loader->add_filter('filter_customer_campaignCode
+        $this->loader->add_filter('filter_customer_company
+        $this->loader->add_filter('filter_customer_createdAt	2021-03-04 11:47:58
+        $this->loader->add_filter('filter_customer_customFields
+        $this->loader->add_filter('filter_customer_customerNumber
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.additionalAddressLine1	N/A
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.additionalAddressLine2	N/A
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.city	N/A
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.company
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.countryId
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.countryStateId
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.createdAt
+        $this->loader->add_filter('filter_customer_defaultBillingAddress.customFields
+        defaultBillingAddress.customerId
+        defaultBillingAddress.department
+        defaultBillingAddress.firstName	N/A
+        defaultBillingAddress.id
+        defaultBillingAddress.lastName	N/A
+        defaultBillingAddress.phoneNumber	N/A
+        defaultBillingAddress.salutationId
+        defaultBillingAddress.street	N/A
+        defaultBillingAddress.title
+        defaultBillingAddress.updatedAt
+        defaultBillingAddress.vatId
+        defaultBillingAddress.zipcode	N/A
+        defaultBillingAddressId
+        defaultPaymentMethodId
+        defaultShippingAddress.additionalAddressLine1	N/A
+        defaultShippingAddress.additionalAddressLine2	N/A
+        defaultShippingAddress.city	N/A
+        defaultShippingAddress.company
+        defaultShippingAddress.countryId
+        defaultShippingAddress.countryStateId
+        defaultShippingAddress.createdAt
+        defaultShippingAddress.customFields
+        defaultShippingAddress.customerId
+        defaultShippingAddress.department
+        defaultShippingAddress.firstName	N/A
+        defaultShippingAddress.id
+        defaultShippingAddress.lastName	N/A
+        defaultShippingAddress.phoneNumber	N/A
+        defaultShippingAddress.salutationId
+        defaultShippingAddress.street	N/A
+        defaultShippingAddress.title
+        defaultShippingAddress.updatedAt
+        defaultShippingAddress.vatId
+        defaultShippingAddress.zipcode	N/A
+        defaultShippingAddressId
+        doubleOptInConfirmDate	2021-03-05T11:57:17+00:00
+        doubleOptInEmailSentDate	2021-03-05T11:57:17+00:00
+        doubleOptInRegistration	1
+        email	ab0e01a6f4bb0f13a861a1820df92415@wordpress-dev.test
+        firstLogin	2021-03-04 11:47:58
+        firstName	N/A
+        groupId
+        guest	0
+        hash
+        id
+        languageId
+        lastLogin	2021-03-05 01:00:00.000000
+        lastName	N/A
+        lastPaymentMethodId
+        legacyEncoder	wordpress
+        legacyPassword	$P$BtcwtW2RfwZhVueFn6CQEcw3zMu8gW1
+        newsletter	0
+        password
+        promotions
+        recoveryCustomer
+        remoteAddress
+        requestedGroupId
+        salesChannelId
+        salutationId
+        tagIds
+        title
+        updatedAt	2021-03-04 12:48:37.000000
+        vatIds
+        **/
     }
 
     /**

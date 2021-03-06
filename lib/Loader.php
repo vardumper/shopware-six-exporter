@@ -41,7 +41,7 @@ class Loader {
 	 * @access   protected
 	 * @var      array    $filters    The filters registered with WordPress to fire when the plugin loads.
 	 */
-	protected $filters;
+	public $filters;
 
 	/**
 	 * Initialize the collections used to maintain the actions and filters.

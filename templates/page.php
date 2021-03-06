@@ -7,8 +7,13 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
     <div class="notice notice-success"><p>Settings saved.</p></div>
     <?php } ?>
-    <h1 class="wp-heading-inline">Wordpress & WooCommerce Export for Shopware 6</h1>
-    <p>This plugin exports your customer, product and order data files for the most important entities like Customers, Guest Users, Products and Order History.</p>
+    <h1 class="wp-heading">Wordpress & WooCommerce Export for Shopware 6 <img style="float:right;" src="<?php echo plugin_dir_url(__DIR__) ?>assets/shopware-logo.svg" width="150" />
+        <div style="display:inline-block;float:right;height:50px;width:150px;background:url(<?php echo plugin_dir_url(__DIR__) ?>assets/woocommerce-logo.svg);background-position: center;background-repeat: no-repeat;background-size: cover;"></div>
+    </h1>
+    <p>
+        This plugin exports your customer, product and order data files for the most important entities like Customers, Guest Users, Products and Order History.
+    </p>
+    <span style="clear:both;"></span>
     <h2 class="nav-tab-wrapper wp-clearfix">
         <a href="#settings" data-id="settings" class="nav-tab nav-tab-active">Settings</a>
         <a href="#profiles" data-id="profiles" class="nav-tab">Shopware Import/Export Profiles</a>
@@ -179,10 +184,10 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         <table class="form-table preview" role="presentation">
             <thead>
                 <tr>
-                    <th>Column</th>
-                    <th>Customer 1</th>
-                    <th>Customer 2</th>
-                    <th>Customer 3</th>
+                    <th style="text-align:right;">Column</th>
+                    <th style="text-align:center;">Customer 1</th>
+                    <th style="text-align:center;">Customer 2</th>
+                    <th style="text-align:center;">Customer 3</th>
                 </tr>
             </thead>
             <tbody>

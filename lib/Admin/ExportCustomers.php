@@ -34,7 +34,9 @@ class ExportCustomers {
     {
         $this->csv = Writer::createFromString();
         $this->csv->setDelimiter(';');
-        
+    }
+    
+    public function export() {
         //insert the header
         $headers = $this->getHeaders();
         $this->csv->insertOne($headers);
@@ -42,8 +44,20 @@ class ExportCustomers {
         $records = self::getRecords();
         
         $this->csv->insertAll($records);
+        
+        return $this;
     }
 
+    private function init() {
+        $loader = $this->plugin->get_loader();
+        foreach(self::getHeaders() as $key)
+        {
+            if (method_exists(ExportCustomers::class, 'filter_' . str_replace('.', '_', $key))) {
+                $loader->add_filter("customer_$key", $this, 'filter_' . str_replace('.', '_', $key), 10, 4); // always 4 arguments: $value, $user_id, full db $row, $default value
+            }
+        }
+    }
+    
     public function getCsv() : string
     {
         return $this->csv->getContent();
@@ -148,13 +162,13 @@ ORDER BY u.ID ASC
         foreach($results as $result) {
             $user_id = (int) $result['ID'];
             
-            $fakeEmails = isset(json_decode(get_option(Plugin::SETTINGS_KEY), true)['fakeEmails']) && json_decode(get_option(Plugin::SETTINGS_KEY), true)['fakeEmails'] === 'yes';
+            $fakeEmails = isset($settings['fakeEmails']) && $settings['fakeEmails'] === 'yes';
             if ($fakeEmails) {
                 $result['email'] = md5($result['email']) . '@' . parse_url(get_bloginfo('url'), PHP_URL_HOST);
             }
             
             // if prevent dups setting is off, do not populate autoIncrement field
-            $customerPreventDups = isset(json_decode(get_option(Plugin::SETTINGS_KEY), true)['customerPreventDups']) && json_decode(get_option(Plugin::SETTINGS_KEY), true)['customerPreventDups'] === 'no';
+            $customerPreventDups = isset($settings['customerPreventDups']) && $settings['customerPreventDups'] === 'no';
             if (!$customerPreventDups) {
                 unset($result['autoIncrement']); // overwrite the random id
             }
@@ -231,8 +245,8 @@ ORDER BY u.ID ASC
             $tmp['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine2']));
             $tmp['defaultBillingAddress.countryId']     = !empty($tmp['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
             
-            $tmp['boundSalesChannelId']                 = self::getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
-            $tmp['salesChannelId']                      = self::getSalesChannelIdByCountry((string) $tmp['defaultBillingAddress.country']); /* make dynamic, not hardcoded – or at least add a filter */
+            $tmp['boundSalesChannelId']                 = apply_filters('customer_bound_sales_channel_id', (string) $tmp['defaultBillingAddress.country'], (int) $user_id, (string) $settings['customerDefaultSalesChannelId']);
+            $tmp['salesChannelId']                      = apply_filters('customer_sales_channel_id', (string) $tmp['defaultBillingAddress.country'], (int) $user_id, (string) $settings['customerDefaultSalesChannelId']);
             $tmp['salutationId']                        = $tmp['defaultBillingAddress.salutationId'];
             
             // edge case: missing salutation on adresses
@@ -241,6 +255,14 @@ ORDER BY u.ID ASC
             }
             if (empty($tmp['defaultBillingAddress.salutationId'])) {
                 $tmp['defaultBillingAddress.salutationId'] = $tmp['salutationId'];
+            }
+            
+            // finally apply all individual field filters
+            foreach($tmp as $key => $value) {
+//                 echo $key;
+//                 echo $value;
+//                 die;
+                $tmp[$key] = apply_filters('shopware_six_exporter_filter_customer_'. $key, $value, $user_id, $result);
             }
             $r[] = $tmp;
         }
@@ -262,6 +284,10 @@ ORDER BY u.ID ASC
         }
         
         return  $r;
+    }
+    
+    public function filter_active($value, $user_id, $row, $default) {
+        return 0;
     }
     
     public static function isSerialized(?string $string) : bool 
@@ -380,7 +406,6 @@ ORDER BY u.ID ASC
         $customerDefaultCountryId           = !empty($options['customerDefaultCountryId']) ? $options['customerDefaultCountryId'] : null;
         $customerSalutationIdUnknown        = !empty($options['customerSalutationIdUnknown']) ? $options['customerSalutationIdUnknown'] : null;
         $customerDefaultGroupId             = !empty($options['customerDefaultGroupId']) ? $options['customerDefaultGroupId'] : null;
-        $customerPreventDups                = !empty($options['customerPreventDups']) ? $options['customerPreventDups'] : null;
 
         return [
             'active' => 1,
@@ -449,7 +474,7 @@ ORDER BY u.ID ASC
             'languageId' => $customerDefaultLanguageId,
             'lastLogin' => null,
             'lastName' => 'N/A',
-//             'lastOrderDate' => null,
+//             'lastOrderDate' => null, 
             'lastPaymentMethodId' => $customerDefaultPaymentMethodId,
             'legacyEncoder' => 'wordpress',
             'legacyPassword' => '',

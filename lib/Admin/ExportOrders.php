@@ -13,6 +13,7 @@
 namespace vardumper\Shopware_Six_Exporter\Admin;
 
 use League\Csv\Writer;
+use vardumper\Shopware_Six_Exporter\Plugin;
 
 /**
  * The dashboard-specific functionality of the plugin.
@@ -27,9 +28,12 @@ use League\Csv\Writer;
 class ExportOrders {
     
     private $csv;
+    private $plugin;
     
-    public function __construct()
+    public function __construct(Plugin $plugin)
     {
+        $this->plugin = $plugin;
+        
         $this->csv = Writer::createFromString();
         $this->csv->setDelimiter(';');
         
@@ -44,7 +48,7 @@ class ExportOrders {
         return $this->csv->toString();
     }
 
-    private function getHeaders() : array 
+    private static function getHeaders() : array 
     {
         return [
             'active',
