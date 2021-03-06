@@ -117,89 +117,87 @@ class Plugin {
         // customer filters
         $this->loader->add_filter('shopware_six_exporter_filter_customer_id', $plugin_admin, 'filter_customer_id', 10, 4);
         $this->loader->add_filter('shopware_six_exporter_filter_customer_active', $plugin_admin, 'filter_customer_active', 10, 4);
-
-        /**
-        $this->loader->add_filter('filter_customer_affiliateCode
-        $this->loader->add_filter('filter_customer_autoIncrement
-        $this->loader->add_filter('filter_customer_birthday
-        $this->loader->add_filter('filter_customer_boundSalesChannelId
-        $this->loader->add_filter('filter_customer_campaignCode
-        $this->loader->add_filter('filter_customer_company
-        $this->loader->add_filter('filter_customer_createdAt	2021-03-04 11:47:58
-        $this->loader->add_filter('filter_customer_customFields
-        $this->loader->add_filter('filter_customer_customerNumber
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.additionalAddressLine1	N/A
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.additionalAddressLine2	N/A
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.city	N/A
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.company
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.countryId
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.countryStateId
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.createdAt
-        $this->loader->add_filter('filter_customer_defaultBillingAddress.customFields
-        defaultBillingAddress.customerId
-        defaultBillingAddress.department
-        defaultBillingAddress.firstName	N/A
-        defaultBillingAddress.id
-        defaultBillingAddress.lastName	N/A
-        defaultBillingAddress.phoneNumber	N/A
-        defaultBillingAddress.salutationId
-        defaultBillingAddress.street	N/A
-        defaultBillingAddress.title
-        defaultBillingAddress.updatedAt
-        defaultBillingAddress.vatId
-        defaultBillingAddress.zipcode	N/A
-        defaultBillingAddressId
-        defaultPaymentMethodId
-        defaultShippingAddress.additionalAddressLine1	N/A
-        defaultShippingAddress.additionalAddressLine2	N/A
-        defaultShippingAddress.city	N/A
-        defaultShippingAddress.company
-        defaultShippingAddress.countryId
-        defaultShippingAddress.countryStateId
-        defaultShippingAddress.createdAt
-        defaultShippingAddress.customFields
-        defaultShippingAddress.customerId
-        defaultShippingAddress.department
-        defaultShippingAddress.firstName	N/A
-        defaultShippingAddress.id
-        defaultShippingAddress.lastName	N/A
-        defaultShippingAddress.phoneNumber	N/A
-        defaultShippingAddress.salutationId
-        defaultShippingAddress.street	N/A
-        defaultShippingAddress.title
-        defaultShippingAddress.updatedAt
-        defaultShippingAddress.vatId
-        defaultShippingAddress.zipcode	N/A
-        defaultShippingAddressId
-        doubleOptInConfirmDate	2021-03-05T11:57:17+00:00
-        doubleOptInEmailSentDate	2021-03-05T11:57:17+00:00
-        doubleOptInRegistration	1
-        email	ab0e01a6f4bb0f13a861a1820df92415@wordpress-dev.test
-        firstLogin	2021-03-04 11:47:58
-        firstName	N/A
-        groupId
-        guest	0
-        hash
-        id
-        languageId
-        lastLogin	2021-03-05 01:00:00.000000
-        lastName	N/A
-        lastPaymentMethodId
-        legacyEncoder	wordpress
-        legacyPassword	$P$BtcwtW2RfwZhVueFn6CQEcw3zMu8gW1
-        newsletter	0
-        password
-        promotions
-        recoveryCustomer
-        remoteAddress
-        requestedGroupId
-        salesChannelId
-        salutationId
-        tagIds
-        title
-        updatedAt	2021-03-04 12:48:37.000000
-        vatIds
-        **/
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_affiliateCode', $plugin_admin, 'filter_customer_affiliateCode', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_autoIncrement', $plugin_admin, 'filter_customer_autoIncrement', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_birthday', $plugin_admin, 'filter_customer_birthday', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_boundSalesChannelId', $plugin_admin, 'filter_customer_boundSalesChannelId', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_campaignCode', $plugin_admin, 'filter_customer_campaignCode', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_company', $plugin_admin, 'filter_customer_company', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_createdAt', $plugin_admin, 'filter_customer_createdAt', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_customFields', $plugin_admin, 'filter_customer_customFields', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_customerNumber', $plugin_admin, 'filter_customer_customerNumber', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress_additionalAddressLine1', $plugin_admin, 'filter_customer_defaultBillingAddress_additionalAddressLine1', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress_additionalAddressLine2', $plugin_admin, 'filter_customer_defaultBillingAddress_additionalAddressLine2', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.city', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.company', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.countryId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.countryStateId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.createdAt', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.customFields', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.customerId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.department', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.firstName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.id', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.lastName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.phoneNumber', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.salutationId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.street', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.title', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.updatedAt', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.vatId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddress.zipcode', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultBillingAddressId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultPaymentMethodId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.additionalAddressLine1', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.additionalAddressLine2', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.city', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.company', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.countryId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.countryStateId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.createdAt', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.customFields', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.customerId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.department', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.firstName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.id', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.lastName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.phoneNumber', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.salutationId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.street', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.title', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.updatedAt', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.vatId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddress.zipcode', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_defaultShippingAddressId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_doubleOptInConfirmDate', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_doubleOptInEmailSentDate', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_doubleOptInRegistration', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_email', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_firstLogin', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_firstName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_groupId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_guest', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_hash', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_id', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_languageId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_lastLogin', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_lastName', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_lastPaymentMethodId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_legacyEncoder', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_legacyPassword', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_newsletter', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_password', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_promotions', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_recoveryCustomer', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_remoteAddress', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_requestedGroupId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_salesChannelId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_salutationId', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_tagIds', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_title', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_updatedAt', $plugin_admin, 'filter_customer_id', 10, 4);
+        $this->loader->add_filter('shopware_six_exporter_filter_customer_vatIds', $plugin_admin, 'filter_customer_id', 10, 4);
+        
     }
 
     /**

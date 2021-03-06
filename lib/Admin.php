@@ -78,16 +78,76 @@ class Admin {
         }
     }
 
-    public function filter_customer_active($value, $user_id, $row, $default = 1) : int 
+    public function filter_customer_active(?int $value, int $user_id, array $row, int $default = 1) : ?int 
     {
-        die('xxx');
-        return 0;
+        if (is_null($value)) {
+            return 0;
+        }
+        return (int) $value;
     }
     
-    public function filter_customer_id($value, $user_id, $row, $default = 1) : int
+    public function filter_customer_id($value, int $user_id, array $row, int $default = null) : ?int
     {
-        die('xxx');
-        return 0;
+        if (!is_null($value)) {
+            return (int) $value;
+        }
+        return null;
+    }
+    
+    public function filter_customer_affiliateCode($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_autoIncrement($value, int $user_id, array $row, int $default = null) : ?int
+    {
+        return $value;
+    }
+    
+    public function filter_customer_birthday($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_boundSalesChannelId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_campaignCode($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_company($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_createdAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_customFields($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        $meta_data['description'] = get_user_meta($user_id,'description', true);
+        return json_encode($meta_data);
+    }
+    
+    public function filter_customer_customerNumber($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_additionalAddressLine1($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_additionalAddressLine2($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
     }
     
     public function admin_menu()

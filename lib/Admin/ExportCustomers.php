@@ -257,14 +257,7 @@ ORDER BY u.ID ASC
                 $tmp['defaultBillingAddress.salutationId'] = $tmp['salutationId'];
             }
             
-            // finally apply all individual field filters
-            foreach($tmp as $key => $value) {
-//                 echo $key;
-//                 echo $value;
-//                 die;
-                $tmp[$key] = apply_filters('shopware_six_exporter_filter_customer_'. $key, $value, $user_id, $result);
-            }
-            $r[] = $tmp;
+          $r[] = $tmp;
         }
         $results = $r;
         
@@ -275,19 +268,19 @@ ORDER BY u.ID ASC
         foreach ($results as $customer) {
             $c = [];
             foreach(self::getHeaders() as $key) {
+                // set to default value
                 $c[$key] = $defaults[$key];
+                // set to database value
                 if (isset($customer[$key]) && !empty($customer[$key])) {
                     $c[$key] = $customer[$key];
                 }
+                // apply filters
+                $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), $c[$key], $user_id, $result);
             }
             $r[] = $c;
         }
         
         return  $r;
-    }
-    
-    public function filter_active($value, $user_id, $row, $default) {
-        return 0;
     }
     
     public static function isSerialized(?string $string) : bool 
