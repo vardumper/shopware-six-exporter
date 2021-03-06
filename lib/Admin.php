@@ -106,7 +106,12 @@ class Admin {
     
     public function filter_customer_birthday($value, int $user_id, array $row, int $default = null) : ?string
     {
-        return $value;
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
     }
     
     public function filter_customer_boundSalesChannelId($value, int $user_id, array $row, int $default = null) : ?string
@@ -126,7 +131,12 @@ class Admin {
     
     public function filter_customer_createdAt($value, int $user_id, array $row, int $default = null) : ?string
     {
-        return $value;
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
     }
     
     public function filter_customer_customFields($value, int $user_id, array $row, int $default = null) : ?string
@@ -139,7 +149,38 @@ class Admin {
     {
         return $value;
     }
-    
+    public function filter_customer_defaultBillingAddress_city($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_company($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_countryId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_countryStateId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_customFields($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_customerId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_department($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_firstName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
     public function filter_customer_defaultBillingAddress_additionalAddressLine1($value, int $user_id, array $row, int $default = null) : ?string
     {
         return $value;
@@ -149,6 +190,329 @@ class Admin {
     {
         return $value;
     }
+    public function filter_customer_defaultBillingAddress_id($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_phoneNumber($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_lastName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_salutationId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_title($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    public function filter_customer_defaultBillingAddress_createdAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_defaultBillingAddress_updatedAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_defaultBillingAddress_vatId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddress_zipcode($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultBillingAddressId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultPaymentMethodId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_additionalAddressLine1($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_additionalAddressLine2($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_city($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_company($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_countryId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_countryStateId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_createdAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_defaultShippingAddress_customFields($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_customerId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_department($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_firstName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_id($value, int $user_id, array $row, int $default = null) : ?int
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_lastName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_phoneNumber($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_salutationId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_street($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_title($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_updatedAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_vatId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddress_zipcode($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_defaultShippingAddressId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_doubleOptInConfirmDate($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_doubleOptInEmailSentDate($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_doubleOptInRegistration($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_email($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_firstLogin($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_firstName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_groupId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_guest($value, int $user_id, array $row, int $default = null) : ?int
+    {
+        return $value;
+    }
+    
+    public function filter_customer_hash($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_languageId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_lastLogin($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_lastName($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_lastPaymentMethodId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_legacyEncoder($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_legacyPassword($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_newsletter($value, int $user_id, array $row, int $default = null) : ?int
+    {
+        return $value;
+    }
+    
+    public function filter_customer_password($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_promotions($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_recoveryCustomer($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_remoteAddress($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_requestedGroupId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_salesChannelId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_salutationId($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_tagIds($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_title($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
+    public function filter_customer_updatedAt($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        if (!is_null($value)) {
+            $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+            $dt = new \DateTimeImmutable($value, $tz);
+            return $dt->format('c');
+        }
+        return null;
+    }
+    
+    public function filter_customer_vatIds($value, int $user_id, array $row, int $default = null) : ?string
+    {
+        return $value;
+    }
+    
     
     public function admin_menu()
     {
