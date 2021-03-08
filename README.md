@@ -13,8 +13,6 @@ or
 composer require wpackagist-plugin/shopware-six-exporter
 ```
 
-Then activate the plugin. Alternatively, download the zip, upload and extract it to your `wp-content/plugins` folder and activate the plugin.
-
 ## Requirements
 * In order to being able export .csv files which have correct mappings (countries, languages, currencies, payment methods, sales channels, etc.) you need to tell the plugin their Uuids so obviously you need to configure Shopware beforehand.   
 * In order to keep and migrate your customers login credentials as well, you need to install my [Wordpress Password Encoder](https://github.com/vardumper/wordpress-password-encoder-for-shopware-six) on the Shopware side, as well. Otherwise, your customers will have to reset their passwords, which might work for you as well. 
