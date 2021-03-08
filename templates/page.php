@@ -7,7 +7,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
     <div class="notice notice-success"><p>Settings saved.</p></div>
     <?php } ?>
-    <h1 class="wp-heading">Wordpress & WooCommerce Export for Shopware 6 <img style="float:right;" src="<?php echo plugin_dir_url(__DIR__) ?>assets/shopware-logo.svg" width="150" />
+    <h1 class="wp-heading">Shopware 6 Exporter<img style="float:right;" src="<?php echo plugin_dir_url(__DIR__) ?>assets/shopware-logo.svg" width="150" />
         <div style="display:inline-block;float:right;height:50px;width:165px;background:url(<?php echo plugin_dir_url(__DIR__) ?>assets/woocommerce-logo.svg);background-position: center;background-repeat: no-repeat;background-size: cover;"></div>
     </h1>
     <p>

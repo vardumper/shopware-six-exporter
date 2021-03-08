@@ -15,12 +15,12 @@ use vardumper\Shopware_Six_Exporter\Plugin;
  * @package           Shopware_Six_Exporter
  *
  * @wordpress-plugin
- * Plugin Name:       WooCommerce & Wordpress Data Export for Shopware 6
- * Plugin URI:        http://erikpoehler.com/wordpress-woocommerce-data-export-fro-shopware-six
+ * Plugin Name:       Shopware 6 Exporter
+ * Plugin URI:        https://github.com/vardumper/shopware-six-exporter
  * Description:       This plugin helps export data from Wordpress and WooCommerce into an importable CSV format for Shopware 6
- * Version:           1.0.0
+ * Version:           0.0.3
  * Author:            Erik Pöhler
- * Author URI:        http://erikpoehler.com/
+ * Author URI:        https://erikpoehler.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       shopware-six-exporter
