@@ -39,6 +39,7 @@ class Admin {
     /** @var array $settings */
     private $settings;
     
+    private $salutations;
     /**
      * Initialize the class and set its properties.
      *
@@ -49,7 +50,11 @@ class Admin {
     public function __construct( Plugin $plugin ) {
         $this->plugin = $plugin;
         $this->settings = json_decode(get_option(Plugin::SETTINGS_KEY), true);
-        
+        $this->salutations = [
+            1 => $this->settings['customerSalutationIdMale'], // male
+            2 => $this->settings['customerSalutationIdFemale'], // female
+        ];
+
         if (isset($_GET['download_csv']))
         {
             switch ($_POST['action']) {
@@ -235,12 +240,8 @@ class Admin {
         if ( empty($value) && (!empty($row['salutationId']) || !empty($row['defaultShippingAddress.salutationId'])) ) {
             $value = $row['salutationId'] ?? $row['defaultShippingAddress.salutationId'];
         }
-        $salutations = [
-            '1' => $this->settings['customerSalutationIdMale'], // male
-            '2' => $this->settings['customerSalutationIdFemale'], // female
-        ];
-        if (array_key_exists((string) $value, $salutations)) {
-            return $salutations[(string) $value];
+        if (array_key_exists((int) $value, $this->salutations)) {
+            return $this->salutations[(int) $value];
         }
         return $this->settings['customerSalutationIdUnknown']; // unknown
     }
@@ -286,7 +287,7 @@ class Admin {
     
     public function filter_customer_defaultPaymentMethodId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $value;
+        return $this->settings['defaultPaymentMethodId'];
     }
     
     public function filter_customer_defaultShippingAddress_additionalAddressLine1($value, int $user_id, array $row, $default = null) : ?string
@@ -376,11 +377,11 @@ class Admin {
             $value = $row['salutationId'] ?? $row['defaultBillingAddress.salutationId'];
         }
         $salutations = [
-            '1' => $this->settings['customerSalutationIdMale'], // male
-            '2' => $this->settings['customerSalutationIdFemale'], // female
+            1 => $this->settings['customerSalutationIdMale'], // male
+            2 => $this->settings['customerSalutationIdFemale'], // female
         ];
-        if (array_key_exists((string) $value, $salutations)) {
-            return $salutations[(string) $value];
+        if (array_key_exists((int) $value, $this->salutations)) {
+            return $this->salutations[(int) $value];
         }
         return $this->settings['customerSalutationIdUnknown']; // unknown
     }
@@ -460,10 +461,7 @@ class Admin {
     
     public function filter_customer_groupId($value, int $user_id, array $row, $default = null) : ?string
     {
-        if (is_null($value)) {
-            return $default;
-        }
-        return $value;
+        return $this->settings['customerDefaultGroupId'];
     }
     
     public function filter_customer_guest($value, int $user_id, array $row, $default = null) : ?int
@@ -504,6 +502,7 @@ class Admin {
     
     public function filter_customer_lastPaymentMethodId($value, int $user_id, array $row, $default = null) : ?string
     {
+        
         return $value;
     }
     
@@ -558,11 +557,11 @@ class Admin {
             $value = $row['defaultBillingAddress.salutationId'] ?? $row['defaultShippingAddress.salutationId'];
         }
         $salutations = [
-            '1' => $this->settings['customerSalutationIdMale'], // male
-            '2' => $this->settings['customerSalutationIdFemale'], // female
+            1 => $this->settings['customerSalutationIdMale'], // male
+            2 => $this->settings['customerSalutationIdFemale'], // female
         ];
-        if (array_key_exists((string) $value, $salutations)) {
-            return $salutations[(string) $value];
+        if (array_key_exists((int) $value, $this->salutations)) {
+            return $this->salutations[(int) $value];
         }
         return $this->settings['customerSalutationIdUnknown']; // unknown
     }
