@@ -10,7 +10,7 @@ use vardumper\Shopware_Six_Exporter\Plugin;
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://example.com
+ * @link              https://erikpoehler.com/shopware-six-exporter
  * @since             1.0.0
  * @package           Shopware_Six_Exporter
  *
@@ -18,7 +18,7 @@ use vardumper\Shopware_Six_Exporter\Plugin;
  * Plugin Name:       Shopware 6 Exporter
  * Plugin URI:        https://github.com/vardumper/shopware-six-exporter
  * Description:       This plugin helps export data from Wordpress and WooCommerce into an importable CSV format for Shopware 6
- * Version:           0.0.3
+ * Version:           0.0.5
  * Author:            Erik Pöhler
  * Author URI:        https://erikpoehler.com/
  * License:           GPL-2.0+
