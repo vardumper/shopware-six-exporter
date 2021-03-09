@@ -244,15 +244,45 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         </form>
     </div>
     <hr />
-    <h2>How to use this plugin?</h2>
-    <ol class="ol-decimal">
-        <li>If you don't want to loose your customers login credential during migration to Shopware, please install <a href="https://github.com/vardumper/wordpress-password-encoder-for-shopware-six">Wordpress Legacy Password Encoder for Shopware 6</a> in the Shopware installation you're importing into.</li>
-        <li>Download the Import/Export profiles and add them to your Shopware MySQL database. It's simpler and faster but you could also create these profiles in the Shopware Backend manually. Thes profiles provided here are based on the Shopware documentation and include all available columns.</li>
-        <li>Configure this plugin by opening the settings tab and entering the desired Shopware Uuid's (for countries, sales channels, salutations, languages and so on...) and save them.</li>
-        <li>Preview the resulting data and start exporting.</li>
-        <li>Finally you can start importing in Shopware</li> 
-    </ol>
     
-    <h2>Advanced mappings</h2>
-    <p>This plugin provides a lot of filters which allow you to manipulate each and every table cells' content before the final CSV is generated. One example: if you want to assign customers with different billing countries to individual sales channels, you can do that with filters. Browse some advanced sanitization and mapping examples in the <a href="">plugin documentation</a>.</p>
+    <div id="poststuff">
+        <div id="post-body" class="metabox-holder columns-2">
+            <div id="post-body-content">
+                <div class="meta-box-sortables ui-sortable">
+                    <div class="postbox">
+                        <h2><span>How to use this plugin?</span></h2>
+                        <div class="inside">
+                            <ol class="ol-decimal">
+                                <li>If you don't want to loose your customers login credential during migration to Shopware, please install <a href="https://github.com/vardumper/wordpress-password-encoder-for-shopware-six">Wordpress Legacy Password Encoder for Shopware 6</a> in the Shopware installation you're importing into.</li>
+                                <li>Download the Import/Export profiles and add them to your Shopware MySQL database. It's simpler and faster but you could also create these profiles in the Shopware Backend manually. Thes profiles provided here are based on the Shopware documentation and include all available columns.</li>
+                                <li>Configure this plugin by opening the settings tab and entering the desired Shopware Uuid's (for countries, sales channels, salutations, languages and so on...) and save them.</li>
+                                <li>Preview the resulting data and start exporting.</li>
+                                <li>Finally you can start importing in Shopware</li> 
+                            </ol>
+                            
+                            <h3>Advanced mappings</h3>
+                            <p>This plugin provides a lot of filters which allow you to manipulate each and every table cells' content before the final CSV is generated. One example: if you want to assign customers with different billing countries to individual sales channels, you can do that with filters. Browse some advanced sanitization and mapping examples in the <a href="">plugin documentation</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="postbox-container-1" class="postbox-container">
+                <div class="meta-box-sortables">
+                    <div class="postbox">
+                        <h2><span>About</span></h2>
+                        <div class="inside">
+                            <dl>
+                                <dt>Plugin Author</dt>
+                                <dd>vardumper</dd>
+                                <dt>Plugin Version</dt>
+                                <dd><?php $plugin = new Plugin(); $plugin->get_version(); ?></dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br class="clear" />
+    </div>
 </div>
