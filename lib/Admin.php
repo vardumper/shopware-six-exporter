@@ -727,7 +727,7 @@ class Admin {
     /**
      * Register the stylesheets for the Dashboard.
      *
-     * @since    1.0.0
+
      */
     public function enqueue_styles() {
 
@@ -755,7 +755,7 @@ class Admin {
     /**
      * Register the JavaScript for the dashboard.
      *
-     * @since    1.0.0
+
      */
     public function enqueue_scripts() {
 

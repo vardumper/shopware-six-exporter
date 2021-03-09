@@ -274,9 +274,13 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                         <div class="inside">
                             <dl>
                                 <dt>Plugin Author</dt>
-                                <dd>vardumper</dd>
+                                <dd><a href="https://github.com/vardumper">vardumper</a></dd>
                                 <dt>Plugin Version</dt>
-                                <dd><?php $plugin = new Plugin(); $plugin->get_version(); ?></dd>
+                                <dd><?php 
+                                $plugin = new Plugin();
+                                echo $plugin->get_version(); ?></dd>
+                                <dt>You are using the latest version</dt>
+                                <?php $plugin->update_check(); ?>
                             </dl>
                         </div>
                     </div>

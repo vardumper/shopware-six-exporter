@@ -262,4 +262,53 @@ class Plugin {
         return $this->version;
     }
 
+    
+    public function update_check() : bool {
+        $check = false;
+        $tz = (!empty(get_option('timezone_string'))) ? new \DateTimeZone(get_option('timezone_string')) : null;
+        $now = new \DateTimeImmutable('now', $tz);
+        
+        $then_ts = !empty(get_option(self::SETTINGS_KEY . '_update_check')) ? get_option(self::SETTINGS_KEY . '_update_check') : false;
+        if ($then_ts === false) {
+            $check = true;
+            update_option(self::SETTINGS_KEY . '_update_check', $now->format('c'));
+        } else {
+            $then = new \DateTimeImmutable($then_ts, $tz);
+            $diff = $now->diff($then)->format('%a');
+            if ($diff > 86400) {
+                $check = true;
+            }
+        }
+
+        if ($check) {
+            $curl = curl_init();
+            
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.github.com/repos/vardumper/shopware-six-exporter/releases',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+                CURLOPT_HTTPHEADER => [
+                    'Accept: application/vnd.github.v3+json',
+                    'User-Agent: Wordpress',
+                ],
+            ));
+            
+            $response = curl_exec($curl);
+            
+            curl_close($curl);
+            $response_array = json_decode($response, true);
+            foreach($response_array as $tag) {
+                $has_update[] = version_compare(self::get_version(), $tag['tag_name'], '>');
+            }
+            update_option(self::SETTINGS_KEY . '_has_update', in_array(true, $has_update), false);
+            return in_array(true, $has_update);
+        }
+        return (bool) get_option(self::SETTINGS_KEY . '_has_update');
+    }
+
 }
