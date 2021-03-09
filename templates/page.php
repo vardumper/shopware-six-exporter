@@ -260,8 +260,8 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                                 <li>Finally you can start importing in Shopware</li> 
                             </ol>
                             
-                            <h3>Advanced mappings</h3>
-                            <p>This plugin provides a lot of filters which allow you to manipulate each and every table cells' content before the final CSV is generated. One example: if you want to assign customers with different billing countries to individual sales channels, you can do that with filters. Browse some advanced sanitization and mapping examples in the <a href="">plugin documentation</a>.</p>
+                            <p><strong>Advanced mappings</strong><br />
+                            This plugin provides a lot of filters which allow you to manipulate each and every table cells' content before the final CSV is generated. One example: if you want to assign customers with different billing countries to individual sales channels, you can do that with filters. Browse some advanced sanitization and mapping examples in the <a href="">plugin documentation</a>.</p>
                         </div>
                     </div>
                 </div>
@@ -272,16 +272,20 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                     <div class="postbox">
                         <h2><span>About</span></h2>
                         <div class="inside">
-                            <dl>
-                                <dt>Plugin Author</dt>
-                                <dd><a href="https://github.com/vardumper">vardumper</a></dd>
-                                <dt>Plugin Version</dt>
-                                <dd><?php 
+                            <p>
+                                Plugin Author: <a href="https://github.com/vardumper">github.com/vardumper</a><br />
+                                Current Version: <?php 
                                 $plugin = new Plugin();
-                                echo $plugin->get_version(); ?></dd>
-                                <dt>You are using the latest version</dt>
-                                <?php $plugin->update_check(); ?>
-                            </dl>
+                                echo $plugin->get_version(); ?><br />
+                                <?php if ($plugin->update_check()) { ?>
+                                <strong><span style="color:#DC3232;">There is an update available</span></strong><br />
+                                <?php } else { ?>
+                                (You are using the latest version)<br />
+                                <?php } ?>
+                                Plugin Homepage: <a href="https://erikpoehler.com/shopware-six-exporter">Shopware 6 Exporter</a><br />
+                                Plugin Support: <a href="https://github.com/vardumper/shopware-six-exporter/issues">Issue Tracker</a>
+                            </p>
+                            <br class="clear" />
                         </div>
                     </div>
                 </div>

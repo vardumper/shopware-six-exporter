@@ -7,7 +7,6 @@
  * public-facing side of the site and the dashboard.
  *
  * @link       https://erikpoehler.com/
- * @since      1.0.0
  *
  * @package    Shopware_Six_Exporter
  * @subpackage Shopware_Six_Exporter/includes
@@ -24,7 +23,6 @@ namespace vardumper\Shopware_Six_Exporter;
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
  * @package    Shopware_Six_Exporter
  * @subpackage Shopware_Six_Exporter/includes
  * @author     Erik Pöhler <info@erikpoehler.com>
@@ -59,7 +57,7 @@ class Plugin {
      * @access   protected
      * @var      string    $version    The current version of the plugin.
      */
-    protected $version = '0.0.6';
+    protected $version = '0.0.8';
 
     /**
      * Define the core functionality of the plugin.
@@ -272,6 +270,7 @@ class Plugin {
         if ($then_ts === false) {
             $check = true;
             update_option(self::SETTINGS_KEY . '_update_check', $now->format('c'));
+            update_option(self::SETTINGS_KEY . '_has_update', false, false);
         } else {
             $then = new \DateTimeImmutable($then_ts, $tz);
             $diff = $now->diff($then)->format('%a');
@@ -303,12 +302,13 @@ class Plugin {
             curl_close($curl);
             $response_array = json_decode($response, true);
             foreach($response_array as $tag) {
-                $has_update[] = version_compare(self::get_version(), $tag['tag_name'], '>');
+                $has_update[] = (bool) version_compare($tag['tag_name'], self::get_version(), '>');
             }
+//             update_option(self::SETTINGS_KEY . '_debug', json_encode($has_update, JSON_PRETTY_PRINT), false);
             update_option(self::SETTINGS_KEY . '_has_update', in_array(true, $has_update), false);
             return in_array(true, $has_update);
         }
-        return (bool) get_option(self::SETTINGS_KEY . '_has_update');
+        return !empty(get_option(self::SETTINGS_KEY . '_has_update')) ? (bool) get_option(self::SETTINGS_KEY . '_has_update') : false;
     }
 
 }

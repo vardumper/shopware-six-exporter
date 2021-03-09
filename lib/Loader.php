@@ -4,7 +4,6 @@
  * Register all actions and filters for the plugin
  *
  * @link       https://erikpoehler.com/shopware-six-exporter/
- * @since      1.0.0
  *
  * @package    Shopware_Six_Exporter
 * @subpackage Shopware_Six_Exporter/includes

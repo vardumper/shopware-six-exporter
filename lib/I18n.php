@@ -7,7 +7,6 @@
  * so that it is ready for translation.
  *
  * @link       https://erikpoehler.com/shopware-six-exporter/
- * @since      1.0.0
  *
  * @package    Shopware_Six_Exporter
 * @subpackage Shopware_Six_Exporter/includes
@@ -21,7 +20,6 @@ namespace vardumper\Shopware_Six_Exporter;
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @since      1.0.0
  * @package    Shopware_Six_Exporter
 * @subpackage Shopware_Six_Exporter/includes
  * @author     Erik Pöhler <info@erikpoehler.com>
