@@ -37,7 +37,7 @@ class Plugin {
      * The loader that's responsible for maintaining and registering all hooks that power
      * the plugin.
      *
-     * @since    1.0.0
+
      * @access   protected
      * @var      Loader    $loader    Maintains and registers all hooks for the plugin.
      */
@@ -46,7 +46,7 @@ class Plugin {
     /**
      * The unique identifier of this plugin.
      *
-     * @since    1.0.0
+
      * @access   protected
      * @var      string    $pluginname    The string used to uniquely identify this plugin.
      */
@@ -55,7 +55,7 @@ class Plugin {
     /**
      * The current version of the plugin.
      *
-     * @since    1.0.0
+
      * @access   protected
      * @var      string    $version    The current version of the plugin.
      */
@@ -67,7 +67,7 @@ class Plugin {
      * Create an instance of the loader which will be used to register the hooks
      * with WordPress.
      *
-     * @since    1.0.0
+
      */
     public function __construct() {
         $this->loader = new Loader();
@@ -79,7 +79,7 @@ class Plugin {
      * Uses the I18n class in order to set the domain and to register the hook
      * with WordPress.
      *
-     * @since    1.0.0
+
      * @access   private
      */
     private function set_locale() {
@@ -94,7 +94,7 @@ class Plugin {
      * Register all of the hooks related to the dashboard functionality
      * of the plugin.
      *
-     * @since    1.0.0
+
      * @access   private
      */
     private function define_admin_hooks() {
@@ -204,7 +204,7 @@ class Plugin {
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
      *
-     * @since    1.0.0
+
      * @access   private
      */
     private function define_frontend_hooks() {
@@ -222,7 +222,7 @@ class Plugin {
      * Load the dependencies, define the locale, and set the hooks for the Dashboard and
      * the public-facing side of the site.
      *
-     * @since    1.0.0
+
      */
     public function run() {
         $this->set_locale();
