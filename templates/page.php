@@ -181,13 +181,11 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         <h2>Preview Data</h2>
         <p>This pages shows you how your final CSV would look like if you export your data with your currently saved settings. It simply picks some random customers/products/orders. This is supposed to help you validate the output before starting a lengthy export. Reload this page to see a differet set of customer/product/order.</p>
         <h3>Customer</h3>
-        <table class="form-table preview" role="presentation">
+        <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
             <thead>
                 <tr>
-                    <th style="text-align:right;">Column</th>
-                    <th style="text-align:center;">Customer 1</th>
-                    <th style="text-align:center;">Customer 2</th>
-                    <th style="text-align:center;">Customer 3</th>
+                    <th style="width:25%;text-align:right;">Column</th>
+                    <th style="text-align:center;">Customer</th>
                 </tr>
             </thead>
             <tbody>
@@ -197,8 +195,6 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                     <tr>
                         <th style="text-align:right;"><?php echo $name; ?></th>
                         <td><?php echo $customers[0][$name]; ?></td>
-                        <td><?php echo isset($customers[1]) ?? $customers[1][$name]; ?></td>
-                        <td><?php echo isset($customers[2]) ?? $customers[2][$name]; ?></td>
                     </tr>
                 <?php } ?>
             </tbody>

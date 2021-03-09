@@ -120,7 +120,7 @@ class ExportCustomers {
             ORDER BY u.ID ASC
             %s;",
             $random ? " JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM wp_users)) AS id) AS u2 WHERE u.ID >= u2.ID " : "",
-            $random ? " LIMIT 3 " : ""
+            $random ? " LIMIT 1 " : ""
         );
         
         $results = $wpdb->get_results($query, ARRAY_A);
@@ -156,7 +156,7 @@ class ExportCustomers {
             $tmp['defaultShippingAddress.countryId']    = !empty($tmp['defaultShippingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
             
             // edge case: remove serialized stuff
-            $tmp['defaultBillingAddress.company']       = (self::isSerialized($tmp['defaultBillingAddress.company'])) ? '' : ucwords(strtolower((string) $tmp['defaultBillingAddress.company']));
+            $tmp['defaultBillingAddress.company']       = (self::isSerialized($tmp['defaultBillingAddress.company'])) ? '' : $tmp['defaultBillingAddress.company'];
             
             $tmp['defaultBillingAddress.firstName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.firstName']))));
             $tmp['defaultBillingAddress.lastName']      = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.lastName']))));

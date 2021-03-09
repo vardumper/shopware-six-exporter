@@ -89,8 +89,8 @@ class Admin {
 
     public function filter_customer_active(?int $value, int $user_id, array $row, $default = null) : ?int 
     {
-        if (is_null($value)) {
-            return $default;
+        if (is_null($value) || empty($value)) {
+            return 1;
         }
         return (int) $value;
     }
@@ -287,7 +287,10 @@ class Admin {
     
     public function filter_customer_defaultPaymentMethodId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $this->settings['defaultPaymentMethodId'];
+        if (empty($value)) {
+            return $default;
+        }
+        return $value;
     }
     
     public function filter_customer_defaultShippingAddress_additionalAddressLine1($value, int $user_id, array $row, $default = null) : ?string
