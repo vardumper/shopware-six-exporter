@@ -46,16 +46,6 @@ class ExportCustomers {
         
         return $this;
     }
-
-    private function init() {
-        $loader = $this->plugin->get_loader();
-        foreach(self::getHeaders() as $key)
-        {
-            if (method_exists(ExportCustomers::class, 'filter_' . str_replace('.', '_', $key))) {
-                $loader->add_filter("customer_$key", $this, 'filter_' . str_replace('.', '_', $key), 10, 4); // always 4 arguments: $value, $user_id, full db $row, $default value
-            }
-        }
-    }
     
     public function getCsv() : string
     {
@@ -74,6 +64,7 @@ class ExportCustomers {
         $defaults = self::getDefaults();
         $query = sprintf("SELECT 
                    u.ID     AS `ID`,
+                   1 AS active,
                    MAX( CASE WHEN um.meta_key = 'customer_nr' and u.ID = um.user_id THEN um.meta_value END ) as `customerNumber`,
                    MAX( CASE WHEN um.meta_key = 'shopware_exporter_random_id' and u.ID = um.user_id THEN um.meta_value END ) as `autoIncrement`,
                    MAX( CASE WHEN um.meta_key = 'first_name' and u.ID = um.user_id THEN um.meta_value END ) as `firstName`,
@@ -127,68 +118,68 @@ class ExportCustomers {
         /**
          * Loop over results once and add additional info, do basic sanitization, etc
          */
-        $r = [];
+        $i = 0;
         foreach($results as $result) {
-            $tmp = $result;
 
             // edge case: missing or incomplete shipping address -> copy over billing address
-            if ( empty($tmp['defaultShippingAddress.city']) || empty($tmp['defaultShippingAddress.street']) ) {
-                $tmp['defaultShippingAddress.firstName']                = $tmp['defaultBillingAddress.firstName'];
-                $tmp['defaultShippingAddress.lastName']                 = $tmp['defaultBillingAddress.lastName'];
-                $tmp['defaultShippingAddress.street']                   = $tmp['defaultBillingAddress.street'];
-                $tmp['defaultShippingAddress.zipcode']                  = $tmp['defaultBillingAddress.zipcode'];
-                $tmp['defaultShippingAddress.phoneNumber']              = $tmp['defaultBillingAddress.phoneNumber'];
-                $tmp['defaultShippingAddress.country']                  = $tmp['defaultBillingAddress.country'];
-                $tmp['defaultShippingAddress.countryStateId']           = $tmp['defaultBillingAddress.countryStateId'];
-                $tmp['defaultShippingAddress.company']                  = $tmp['defaultBillingAddress.company'];
-                $tmp['defaultShippingAddress.city']                     = $tmp['defaultBillingAddress.city'];
-                $tmp['defaultShippingAddress.additionalAddressLine1']   = $tmp['defaultBillingAddress.additionalAddressLine1'];
-                $tmp['defaultShippingAddress.additionalAddressLine2']   = $tmp['defaultBillingAddress.additionalAddressLine2'];
+            if ( empty($result['defaultShippingAddress.city']) || empty($result['defaultShippingAddress.street']) ) {
+                $result['defaultShippingAddress.firstName']                = $result['defaultBillingAddress.firstName'];
+                $result['defaultShippingAddress.lastName']                 = $result['defaultBillingAddress.lastName'];
+                $result['defaultShippingAddress.street']                   = $result['defaultBillingAddress.street'];
+                $result['defaultShippingAddress.zipcode']                  = $result['defaultBillingAddress.zipcode'];
+                $result['defaultShippingAddress.phoneNumber']              = $result['defaultBillingAddress.phoneNumber'];
+                $result['defaultShippingAddress.country']                  = $result['defaultBillingAddress.country'];
+                $result['defaultShippingAddress.countryStateId']           = $result['defaultBillingAddress.countryStateId'];
+                $result['defaultShippingAddress.company']                  = $result['defaultBillingAddress.company'];
+                $result['defaultShippingAddress.city']                     = $result['defaultBillingAddress.city'];
+                $result['defaultShippingAddress.additionalAddressLine1']   = $result['defaultBillingAddress.additionalAddressLine1'];
+                $result['defaultShippingAddress.additionalAddressLine2']   = $result['defaultBillingAddress.additionalAddressLine2'];
             }
 
-            $tmp['defaultShippingAddress.firstName']    = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultShippingAddress.firstName']))));
-            $tmp['defaultShippingAddress.lastName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultShippingAddress.lastName']))));
-            $tmp['defaultShippingAddress.city']         = trim(ucwords(strtolower((string)$tmp['defaultShippingAddress.city'])));
-            $tmp['defaultShippingAddress.street']       = trim(ucwords(strtolower((string)$tmp['defaultShippingAddress.street'])));
-            $tmp['defaultShippingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $tmp['defaultShippingAddress.additionalAddressLine1']));
-            $tmp['defaultShippingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultShippingAddress.additionalAddressLine2']));
-            $tmp['defaultShippingAddress.countryId']    = !empty($tmp['defaultShippingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
+            $result['defaultShippingAddress.firstName']    = implode('-', array_map('ucfirst', explode('-', strtolower((string) $result['defaultShippingAddress.firstName']))));
+            $result['defaultShippingAddress.lastName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $result['defaultShippingAddress.lastName']))));
+            $result['defaultShippingAddress.city']         = trim(ucwords(strtolower((string)$result['defaultShippingAddress.city'])));
+            $result['defaultShippingAddress.street']       = trim(ucwords(strtolower((string)$result['defaultShippingAddress.street'])));
+            $result['defaultShippingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $result['defaultShippingAddress.additionalAddressLine1']));
+            $result['defaultShippingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $result['defaultShippingAddress.additionalAddressLine2']));
+            $result['defaultShippingAddress.countryId']    = !empty($result['defaultShippingAddress.country']) ? self::getCountryIdByIsoCode($result['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
             
             // edge case: remove serialized stuff
-            $tmp['defaultBillingAddress.company']       = (self::isSerialized($tmp['defaultBillingAddress.company'])) ? '' : $tmp['defaultBillingAddress.company'];
+            $result['defaultBillingAddress.company']       = (self::isSerialized($result['defaultBillingAddress.company'])) ? '' : $result['defaultBillingAddress.company'];
             
-            $tmp['defaultBillingAddress.firstName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.firstName']))));
-            $tmp['defaultBillingAddress.lastName']      = implode('-', array_map('ucfirst', explode('-', strtolower((string) $tmp['defaultBillingAddress.lastName']))));
-            $tmp['defaultBillingAddress.city']          = trim(ucwords(strtolower((string) $tmp['defaultBillingAddress.city'])));
-            $tmp['defaultBillingAddress.street']        = trim(ucwords(strtolower((string) $tmp['defaultBillingAddress.street'])));
-            $tmp['defaultBillingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine1']));
-            $tmp['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $tmp['defaultBillingAddress.additionalAddressLine2']));
-            $tmp['defaultBillingAddress.countryId']     = !empty($tmp['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($tmp['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
-            $tmp['salutationId']                        = $tmp['defaultBillingAddress.salutationId'];
+            $result['defaultBillingAddress.firstName']     = implode('-', array_map('ucfirst', explode('-', strtolower((string) $result['defaultBillingAddress.firstName']))));
+            $result['defaultBillingAddress.lastName']      = implode('-', array_map('ucfirst', explode('-', strtolower((string) $result['defaultBillingAddress.lastName']))));
+            $result['defaultBillingAddress.city']          = trim(ucwords(strtolower((string) $result['defaultBillingAddress.city'])));
+            $result['defaultBillingAddress.street']        = trim(ucwords(strtolower((string) $result['defaultBillingAddress.street'])));
+            $result['defaultBillingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $result['defaultBillingAddress.additionalAddressLine1']));
+            $result['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $result['defaultBillingAddress.additionalAddressLine2']));
+            $result['defaultBillingAddress.countryId']     = !empty($result['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($result['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
+            $result['salutationId']                        = $result['defaultBillingAddress.salutationId'];
             
-          $r[] = $tmp;
+            $results[$i] = $result;
+            $i++;
         }
-        $results = $r;
-        
+
         /**
          * Loop over results again and set defautl values where no data given
          */
-        $r = [];
+        $i = 0;
         foreach ($results as $customer) {
             $user_id = (int) $customer['ID'];
+            
             $c = [];
             foreach(self::getHeaders() as $key) {
-                // we want to apply filters on both: results from db & those keys not set in intial db query
+                // we want to apply filters on both: results from db & those not included in query, so we loop over all headers
                 if (isset($customer[$key]) && !empty($customer[$key])) {
                     $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), $customer[$key], $user_id, $customer, $defaults[$key]);
                 } else {
                     $c[$key] = apply_filters('shopware_six_exporter_filter_customer_'. str_replace('.','_',$key), null, $user_id, $customer, $defaults[$key]); 
                 }
             }
-            $r[] = $c;
+            $results[$i] = $c;
+            $i++;
         }
-        
-        return  $r;
+        return $results;
     }
     
     public static function isSerialized(?string $string) : bool 
@@ -295,7 +286,7 @@ class ExportCustomers {
         return null;
     }
     
-    private static function getDefaults() : array
+    public static function getDefaults() : array
     {
         $options = json_decode(get_option(Plugin::SETTINGS_KEY), true);
         $host = parse_url(get_bloginfo('url'), PHP_URL_HOST);

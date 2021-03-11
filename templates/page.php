@@ -184,13 +184,15 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
             <thead>
                 <tr>
-                    <th style="width:25%;text-align:right;">Column</th>
-                    <th style="text-align:center;">Customer</th>
+                    <th width="25%" style="width:25%;text-align:right;">Column</th>
+                    <th width="75%" style="text-align:center;">Customer</th>
                 </tr>
             </thead>
             <tbody>
                 <?php 
                 $customers = ExportCustomers::getRecords(true);
+//                 var_dump($customers);
+//                 die;
                 foreach(ExportCustomers::getHeaders() as $name) { ?>
                     <tr>
                         <th style="text-align:right;"><?php echo $name; ?></th>

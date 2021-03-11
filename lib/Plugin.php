@@ -14,6 +14,8 @@
 
 namespace vardumper\Shopware_Six_Exporter;
 
+use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
+
 /**
  * The core plugin class.
  *
@@ -110,7 +112,8 @@ class Plugin {
         
         // add endpoints – in order to make csv download work
         $this->loader->add_filter('query_vars', $plugin_admin, 'query_vars', 10, 1);
-        $this->loader->add_action('parse_request', $plugin_admin, 'parse_request');
+        $this->loader->add_action('themes_loaded', $plugin_admin, 'parse_request');
+        $this->loader->add_action('after_setup_theme', $plugin_admin, 'download_csv');
         
         // customer filters
         $this->loader->add_filter('shopware_six_exporter_filter_customer_id', $plugin_admin, 'filter_customer_id', 10, 4);
@@ -195,7 +198,6 @@ class Plugin {
         $this->loader->add_filter('shopware_six_exporter_filter_customer_title', $plugin_admin, 'filter_customer_title', 10, 4);
         $this->loader->add_filter('shopware_six_exporter_filter_customer_updatedAt', $plugin_admin, 'filter_customer_updatedAt', 10, 4);
         $this->loader->add_filter('shopware_six_exporter_filter_customer_vatIds', $plugin_admin, 'filter_customer_vatIds', 10, 4);
-        
     }
 
     /**
@@ -293,7 +295,7 @@ class Plugin {
                 CURLOPT_CUSTOMREQUEST => 'GET',
                 CURLOPT_HTTPHEADER => [
                     'Accept: application/vnd.github.v3+json',
-                    'User-Agent: Wordpress',
+                    'User-Agent: PHP ' . PHP_VERSION,
                 ],
             ));
             

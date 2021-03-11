@@ -53,9 +53,10 @@ class Admin {
             1 => $this->settings['customerSalutationIdMale'], // male
             2 => $this->settings['customerSalutationIdFemale'], // female
         ];
+    }
 
-        if (isset($_GET['download_csv']))
-        {
+    public function download_csv() {
+        if (isset($_GET['download_csv'])) {
             switch ($_POST['action']) {
                 case 'Export Customers':
                     $exporter = new ExportCustomers();
@@ -85,7 +86,7 @@ class Admin {
             exit;
         }
     }
-
+    
     public function filter_customer_active(?int $value, int $user_id, array $row, $default = null) : ?int 
     {
         if (is_null($value) || empty($value)) {
@@ -132,7 +133,7 @@ class Admin {
     
     public function filter_customer_boundSalesChannelId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $this->settings['customerDefaultSalesChannelId'];
+        return $default;
     }
     
     public function filter_customer_campaignCode($value, int $user_id, array $row, $default = null) : ?string
@@ -143,7 +144,7 @@ class Admin {
     public function filter_customer_company($value, int $user_id, array $row, $default = null) : ?string
     {
         if (empty($value) && !empty($row['defaultBillingAddress.company'])) {
-            return $row['defaultBillingAddress.company'];
+            return $default;
         }
         return $value;
     }
@@ -175,10 +176,16 @@ class Admin {
     }
     public function filter_customer_defaultBillingAddress_city($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_company($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_countryId($value, int $user_id, array $row, $default = null) : ?string
@@ -187,7 +194,7 @@ class Admin {
     }
     public function filter_customer_defaultBillingAddress_countryStateId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $value;
+        return null;
     }
     public function filter_customer_defaultBillingAddress_customFields($value, int $user_id, array $row, $default = null) : ?string
     {
@@ -199,6 +206,9 @@ class Admin {
     }
     public function filter_customer_defaultBillingAddress_department($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_firstName($value, int $user_id, array $row, $default = null) : ?string
@@ -210,11 +220,17 @@ class Admin {
     }
     public function filter_customer_defaultBillingAddress_additionalAddressLine1($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultBillingAddress_additionalAddressLine2($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_id($value, int $user_id, array $row, $default = null) : ?string
@@ -223,6 +239,9 @@ class Admin {
     }
     public function filter_customer_defaultBillingAddress_phoneNumber($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -247,6 +266,9 @@ class Admin {
     
     public function filter_customer_defaultBillingAddress_title($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     public function filter_customer_defaultBillingAddress_createdAt($value, int $user_id, array $row, $default = null) : ?string
@@ -276,6 +298,9 @@ class Admin {
     
     public function filter_customer_defaultBillingAddress_zipcode($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -294,32 +319,44 @@ class Admin {
     
     public function filter_customer_defaultShippingAddress_additionalAddressLine1($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultShippingAddress_additionalAddressLine2($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultShippingAddress_city($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultShippingAddress_company($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultShippingAddress_countryId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $value;
+        return $default;
     }
     
     public function filter_customer_defaultShippingAddress_countryStateId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $value;
+        return null;
     }
     
     public function filter_customer_defaultShippingAddress_createdAt($value, int $user_id, array $row, $default = null) : ?string
@@ -344,6 +381,9 @@ class Admin {
     
     public function filter_customer_defaultShippingAddress_department($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -370,6 +410,9 @@ class Admin {
     
     public function filter_customer_defaultShippingAddress_phoneNumber($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -390,11 +433,17 @@ class Admin {
     
     public function filter_customer_defaultShippingAddress_street($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
     public function filter_customer_defaultShippingAddress_title($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -410,6 +459,9 @@ class Admin {
     
     public function filter_customer_defaultShippingAddress_zipcode($value, int $user_id, array $row, $default = null) : ?string
     {
+        if (empty($value)) {
+            return $default;
+        }
         return $value;
     }
     
@@ -504,13 +556,12 @@ class Admin {
     
     public function filter_customer_lastPaymentMethodId($value, int $user_id, array $row, $default = null) : ?string
     {
-        
         return $value;
     }
     
     public function filter_customer_legacyEncoder($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $value;
+        return 'wordpress';
     }
     
     public function filter_customer_legacyPassword($value, int $user_id, array $row, $default = null) : ?string
@@ -550,7 +601,7 @@ class Admin {
     
     public function filter_customer_salesChannelId($value, int $user_id, array $row, $default = null) : ?string
     {
-        return $this->settings['customerDefaultSalesChannelId'];
+        return $default;
     }
     
     public function filter_customer_salutationId($value, int $user_id, array $row, $default = null) : string
@@ -558,14 +609,10 @@ class Admin {
         if ( empty($value) && (!empty($row['defaultBillingAddress.salutationId']) || !empty($row['defaultShippingAddress.salutationId'])) ) {
             $value = $row['defaultBillingAddress.salutationId'] ?? $row['defaultShippingAddress.salutationId'];
         }
-        $salutations = [
-            1 => $this->settings['customerSalutationIdMale'], // male
-            2 => $this->settings['customerSalutationIdFemale'], // female
-        ];
         if (array_key_exists((int) $value, $this->salutations)) {
             return $this->salutations[(int) $value];
         }
-        return $this->settings['customerSalutationIdUnknown']; // unknown
+        return $default; // unknown
     }
     
     public function filter_customer_tagIds($value, int $user_id, array $row, $default = null) : ?string
@@ -596,17 +643,6 @@ class Admin {
     
     public function admin_menu()
     {
-        /**
-        add_menu_page( 
-            'Custom Menu Page Title', 
-            'Custom Menu Page', 
-            'manage_options', 
-            'custom.php', 
-            '', 
-            
-            90
-        );
-        **/
         add_menu_page(
             __('Shopware Export', 'shopware-six-exporter'),
             __('Shopware Export', 'shopware-six-exporter'),
@@ -615,8 +651,7 @@ class Admin {
             [ $this, 'showPage' ],
             plugin_dir_url(__DIR__) . 'assets/shopware-icon.svg', 
             90
-            );
-        
+        );
     }
     
     public function showPage() : void
