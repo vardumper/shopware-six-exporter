@@ -203,8 +203,6 @@ class Plugin {
     /**
      * Register all of the hooks related to the public-facing functionality
      * of the plugin.
-     *
-
      * @access   private
      */
     private function define_frontend_hooks() {
@@ -218,7 +216,6 @@ class Plugin {
 
     /**
      * Run the loader to execute all of the hooks with WordPress.
-     *
      * Load the dependencies, define the locale, and set the hooks for the Dashboard and
      * the public-facing side of the site.
      *

@@ -216,6 +216,9 @@ class Admin {
         if (empty($value)) {
             $value = $row['firstName'];
         }
+        if (empty($value)) {
+            return $default;
+        }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
     public function filter_customer_defaultBillingAddress_additionalAddressLine1($value, int $user_id, array $row, $default = null) : ?string
@@ -249,6 +252,9 @@ class Admin {
     {
         if (empty($value)) {
             $value = $row['lastName'];
+        }
+        if (empty($value)) {
+            return $default;
         }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
@@ -392,6 +398,9 @@ class Admin {
         if (empty($value)) {
             $value = $row['firstName'];
         }
+        if (empty($value)) {
+            return $default;
+        }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
     
@@ -404,6 +413,9 @@ class Admin {
     {
         if (empty($value)) {
             $value = $row['lastName'];
+        }
+        if (empty($value)) {
+            return $default;
         }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
@@ -510,6 +522,9 @@ class Admin {
         if (empty($value) && !empty($row['defaultBillingAddress.firstName'])) {
             $value = $row['defaultBillingAddress.firstName'];
         }
+        if (empty($value)) {
+            return $default;
+        }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
     
@@ -550,6 +565,9 @@ class Admin {
     {
         if (empty($value) && !empty($row['defaultBillingAddress.lastName'])) {
             $value = $row['defaultBillingAddress.lastName'];
+        }
+        if (empty($value)) {
+            return $default;
         }
         return implode('-', array_map('ucfirst', explode('-', strtolower((string) $value))));
     }
