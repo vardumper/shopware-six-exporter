@@ -32,3 +32,6 @@ If you have tried the migration wizard, and it worked for you, well then congrat
 ## So who is this for?
 Anyone migrating a WooCommerce online store over to Shopware 6 in Community, Professional or Enterprise flavour. 
 If you import multiple WooCommerce installations into a single Shopware installation it also makes sense to import matching .csv files with identical format and compatible with the same Shopware ImportExport profile.
+
+## Advanced Mappings
+Whenever assinging a default value for country or sales channel is not enough, you can use the plugin filters to achieve complex mappings. Read more about how ti use them [here](https://github.com/vardumper/shopware-six-exporter/wiki/Advanced-Mappings).
