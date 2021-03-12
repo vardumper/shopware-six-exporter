@@ -265,9 +265,9 @@ class Admin {
             $value = $row['salutationId'] ?? $row['defaultShippingAddress.salutationId'];
         }
         if (array_key_exists((int) $value, $this->salutations)) {
-            return $this->salutations[(int) $value];
+            return !empty($this->salutations[(int) $value]) ? $this->salutations[(int) $value] : null;
         }
-        return $this->settings['customerSalutationIdUnknown']; // unknown
+        return !empty($default) ? $default : null;
     }
     
     public function filter_customer_defaultBillingAddress_title($value, int $user_id, array $row, $default = null) : ?string

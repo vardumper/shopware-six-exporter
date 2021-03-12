@@ -142,7 +142,6 @@ class ExportCustomers {
             $result['defaultShippingAddress.street']       = trim(ucwords(strtolower((string)$result['defaultShippingAddress.street'])));
             $result['defaultShippingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $result['defaultShippingAddress.additionalAddressLine1']));
             $result['defaultShippingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $result['defaultShippingAddress.additionalAddressLine2']));
-            $result['defaultShippingAddress.countryId']    = !empty($result['defaultShippingAddress.country']) ? self::getCountryIdByIsoCode($result['defaultShippingAddress.country']) : $settings['customerDefaultCountryId'];
             
             // edge case: remove serialized stuff
             $result['defaultBillingAddress.company']       = (self::isSerialized($result['defaultBillingAddress.company'])) ? '' : $result['defaultBillingAddress.company'];
@@ -153,7 +152,6 @@ class ExportCustomers {
             $result['defaultBillingAddress.street']        = trim(ucwords(strtolower((string) $result['defaultBillingAddress.street'])));
             $result['defaultBillingAddress.additionalAddressLine1'] = ucwords(strtolower((string) $result['defaultBillingAddress.additionalAddressLine1']));
             $result['defaultBillingAddress.additionalAddressLine2'] = ucwords(strtolower((string) $result['defaultBillingAddress.additionalAddressLine2']));
-            $result['defaultBillingAddress.countryId']     = !empty($result['defaultBillingAddress.country']) ? self::getCountryIdByIsoCode($result['defaultBillingAddress.country']) : $settings['customerDefaultCountryId'];
             $result['salutationId']                        = $result['defaultBillingAddress.salutationId'];
             
             $results[$i] = $result;
@@ -200,63 +198,6 @@ class ExportCustomers {
         }
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
-    }
-
-    public static function getCountryIdByIsoCode(string $iso_code) : string
-    {
-        switch ($iso_code) {
-            case 'CH':
-                return '3667a6331f7141fdacf9aa2dbd2c61de';
-                break;
-            case 'AT':
-                return '7deabf41ba494c8ba376c72cb708f342';
-                break;
-            case 'LI':
-                return 'bde89b35a2574aa788d5a67dcff855d4';
-                break;
-            case 'FR':
-                return 'c69089f50ddd49e0946bb2079dd699be';
-                break;
-            case 'LU':
-                return '028c96fdb4284377a404f04b4259cfa4';
-                break;
-            case 'NL':
-                return '6abc35e041424a79b6dbce60e5eda6a5';
-                break;
-            case 'BE':
-                return 'c5b9ce79c81846889a23bc65765d51e6';
-                break;
-            case 'ES':
-                return '06755a1863834c7786001c51c6770ce5';
-                break;
-            case 'IT':
-                return 'cd2bb4721f20471d8f2b22ec8a028b97';
-                break;
-            case 'GB':
-                return '156103f32ca142c68c1d4301f6a7f279';
-                break;
-            case 'IE':
-                return 'e89cfb36edab4539883d84339d8f5041';
-                break;
-            case 'DE':
-                return 'a0ac9c9b88024f4ea4230697158b9c01';
-                break;
-            default:
-                return json_decode(get_option(Plugin::SETTINGS_KEY), true)['customerDefaultCountryId'];
-                break;
-        }
-    }
-    
-    public static function getSalesChannelIdByCountry(string $iso_code) : string
-    {
-        switch ($iso_code) {
-            case 'BE':
-                return strtolower('40366E32E048476C82F2FF73518C7232');
-                break;
-            default:
-                return json_decode(get_option(Plugin::SETTINGS_KEY), true)['customerDefaultSalesChannelId'];
-                break;
-        }
     }
     
     /**
