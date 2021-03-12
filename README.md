@@ -16,6 +16,7 @@ composer require wpackagist-plugin/shopware-six-exporter
 ## Requirements
 * In order to being able export .csv files which have correct mappings (countries, languages, currencies, payment methods, sales channels, etc.) you need to tell the plugin their Uuids so obviously you need to configure Shopware beforehand.   
 * In order to keep and migrate your customers login credentials as well, you need to install my [Wordpress Password Encoder](https://github.com/vardumper/wordpress-password-encoder-for-shopware-six) on the Shopware side, as well. Otherwise, your customers will have to reset their passwords, which might work for you as well. 
+* Although making use of performance-optimized database queries, you might need to increase your servers PHP memory_limit temporarily. PHP resources are primarily required for the additional column filters. I have successfully exported 50k customers with 1G of PHP memroy and 100k with 2.5G.
 
 ## Plugin Features
 * This plugin generates importable .csv files of your WooCommerce online stores' most important entities (such as customers, products and orders) for later import into Shopware 6. 
