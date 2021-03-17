@@ -75,7 +75,7 @@ class ExportCustomers {
                    MAX( CASE WHEN um.meta_key = 'billing_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.additionalAddressLine2`,
                    MAX( CASE WHEN um.meta_key = 'billing_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.city`,
                    MAX( CASE WHEN um.meta_key = 'billing_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.company`,
-                   MAX( CASE WHEN um.meta_key = 'billing_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.country`,
+                   MAX( CASE WHEN um.meta_key = 'billing_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.countryId`,
                    MAX( CASE WHEN um.meta_key = 'billing_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.countryStateId`,
                    MAX( CASE WHEN um.meta_key = 'billing_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.firstName`,
                    MAX( CASE WHEN um.meta_key = 'billing_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultBillingAddress.lastName`,
@@ -87,7 +87,7 @@ class ExportCustomers {
                    MAX( CASE WHEN um.meta_key = 'shipping_address_2' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.additionalAddressLine2`,
                    MAX( CASE WHEN um.meta_key = 'shipping_city' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.city`,
                    MAX( CASE WHEN um.meta_key = 'shipping_company' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.company`,
-                   MAX( CASE WHEN um.meta_key = 'shipping_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.country`,
+                   MAX( CASE WHEN um.meta_key = 'shipping_country' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.countryId`,
                    MAX( CASE WHEN um.meta_key = 'shipping_state' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.countryStateId`,
                    MAX( CASE WHEN um.meta_key = 'shipping_first_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.firstName`,
                    MAX( CASE WHEN um.meta_key = 'shipping_last_name' and u.ID = um.user_id THEN um.meta_value END ) as `defaultShippingAddress.lastName`,
@@ -110,9 +110,9 @@ class ExportCustomers {
             ORDER BY u.ID ASC
             %s;",
             $random ? " JOIN (SELECT CEIL(RAND() * (SELECT MAX(id) FROM wp_users)) AS id) AS u2 WHERE u.ID >= u2.ID " : "",
-            $random ? " LIMIT 1 " : ""
+            $random ? " LIMIT 1 " : " "
         );
-        
+//         var_dump($query);die;
         $results = $wpdb->get_results($query, ARRAY_A);
         
         /**
