@@ -128,7 +128,7 @@ class ExportCustomers {
                 $result['defaultShippingAddress.street']                   = $result['defaultBillingAddress.street'];
                 $result['defaultShippingAddress.zipcode']                  = $result['defaultBillingAddress.zipcode'];
                 $result['defaultShippingAddress.phoneNumber']              = $result['defaultBillingAddress.phoneNumber'];
-                $result['defaultShippingAddress.country']                  = $result['defaultBillingAddress.country'];
+                $result['defaultShippingAddress.countryId']                  = $result['defaultBillingAddress.countryId'];
                 $result['defaultShippingAddress.countryStateId']           = $result['defaultBillingAddress.countryStateId'];
                 $result['defaultShippingAddress.company']                  = $result['defaultBillingAddress.company'];
                 $result['defaultShippingAddress.city']                     = $result['defaultBillingAddress.city'];
