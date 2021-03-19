@@ -2,6 +2,7 @@
 
 use vardumper\Shopware_Six_Exporter\Plugin;
 use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
+use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
 ?>
 <div class="wrap" id="shopware-six-exporter">
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
@@ -136,6 +137,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                                     <input type="hidden" name="action" value="save" />
                                     <input name="action" class="button button-secondary button-large" type="submit" value="Save Settings" />
                                 </td>
+                                <td>When "Prevent Duplicates" is activated, a unique ID will be attached as meta value to all of your orders and users. So don't be surprised if saving the settings can take many minutes to finish.
                             </tr>
                         </tbody>
                     </table>
@@ -178,29 +180,60 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
         </table>
     </div>
     <div class="content-tab" id="preview" hidden="hidden">
+        
         <h2>Preview Data</h2>
         <p>This pages shows you how your final CSV would look like if you export your data with your currently saved settings. It simply picks some random customers/products/orders. This is supposed to help you validate the output before starting a lengthy export. Reload this page to see a differet set of customer/product/order.</p>
-        <h3>Customer</h3>
-        <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
-            <thead>
-                <tr>
-                    <th width="25%" style="width:25%;text-align:right;">Column</th>
-                    <th width="75%" style="text-align:center;">Customer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php 
-                $customers = ExportCustomers::getRecords(true);
-//                 var_dump($customers);
-//                 die;
-                foreach(ExportCustomers::getHeaders() as $name) { ?>
+        
+        <ul class="subsubsub">
+            <li><a href="#customers" data-id="preview-customers" class="current">Customers</a> |</li>
+            <li><a href="#guests" data-id="preview-guests" class="">Guests</a> |</li>
+            <li><a href="#products" data-id="preview-products" class="disabled" style="pointer-events: none;">Products</a> |</li>
+            <li><a href="#orders" data-id="preview-orders" class="disabled" style="pointer-events: none;">Orders</a></li>
+        </ul>
+        <br class="clear" />
+        
+        <div class="preview-tab" id="preview-customers">
+            <h3>Customer</h3>
+            <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
+                <thead>
                     <tr>
-                        <th style="text-align:right;"><?php echo $name; ?></th>
-                        <td><?php echo $customers[0][$name]; ?></td>
+                        <th width="25%" style="width:25%;text-align:right;">Column</th>
+                        <th width="75%" style="text-align:center;">Customer</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php 
+                    $customers = ExportCustomers::getRecords(true);
+                    foreach(ExportCustomers::getHeaders() as $name) { ?>
+                        <tr>
+                            <th style="text-align:right;"><?php echo $name; ?></th>
+                            <td><?php echo $customers[0][$name]; ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        <div class="preview-tab" id="preview-guests">
+            <h3>Guest</h3>
+            <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
+                <thead>
+                    <tr>
+                        <th width="25%" style="width:25%;text-align:right;">Column</th>
+                        <th width="75%" style="text-align:center;">Customer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $guests = ExportGuests::getRecords(true);
+                    foreach(ExportGuests::getHeaders() as $name) { ?>
+                        <tr>
+                            <th style="text-align:right;"><?php echo $name; ?></th>
+                            <td><?php echo $guests[0][$name]; ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
     </div>
     <div class="content-tab" id="export" hidden="hidden">
         <h2>Export Data</h2>
@@ -211,7 +244,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
                         <tr>
                             <th scope="row">Customer Export</th>
                             <td>
-                                <input name="action" class="button button-primary button-large" type="submit" value="Export Customers" />&nbsp;<input name="action" class="button button-primary button-large disabled" title="not implemented yet" type="submit" value="Export Guests" />
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Customers" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Guests" />
                             </td>
                         </tr>
                     </tbody>

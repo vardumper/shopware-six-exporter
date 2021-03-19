@@ -114,11 +114,23 @@ class Admin {
         if (!$customerPreventDups) {
             return null;
         }
-        // this should never happen, but hey: better safe than sorry
-        if (false === get_user_meta($user_id, 'shopware_exporter_random_id', true)) {
-            add_user_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
+        if (!empty($value)) {
+            return $value;
         }
-        return get_user_meta($user_id, 'shopware_exporter_random_id', true);
+        switch ($_POST['action']) {
+            case 'Export Customers':
+                if (false === get_user_meta($user_id, 'shopware_exporter_random_id', true)) {
+                    add_user_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
+                }
+                return get_user_meta($user_id, 'shopware_exporter_random_id', true);
+                break;
+            case 'Export Guests':
+                if (false === get_post_meta($user_id, 'shopware_exporter_random_id', true)) {
+                    add_post_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
+                }
+                return get_post_meta($user_id, 'shopware_exporter_random_id', true);
+                break;
+        }
     }
     
     public function filter_customer_birthday($value, int $user_id, array $row, $default = null) : ?string
@@ -533,12 +545,12 @@ class Admin {
         return $this->settings['customerDefaultGroupId'];
     }
     
-    public function filter_customer_guest($value, int $user_id, array $row, $default = null) : ?int
+    public function filter_customer_guest($value, int $user_id, array $row, $default = null) : int
     {
         if (is_null($value)) {
-            return $default;
+            return (int) $default;
         }
-        return $value;
+        return (int) $value;
     }
     
     public function filter_customer_hash($value, int $user_id, array $row, $default = null) : ?string
@@ -687,6 +699,7 @@ class Admin {
             // each time settings are saved, lets add random ids (if chosen and if necessary)
             if (isset($data['customerPreventDups']) && $data['customerPreventDups'] === 'yes') {
                 $this->shopware_exporter_add_customer_random_id_batch();
+                $this->shopware_exporter_add_order_random_id_batch();
             }
             unset($data['action']); // remove junk
             update_option(Plugin::SETTINGS_KEY, json_encode($data, JSON_PRETTY_PRINT  )); // save
@@ -710,6 +723,22 @@ class Admin {
         }
     }
     
+    public function shopware_exporter_add_order_random_id_batch() : void
+    {
+        global $wpdb;
+        
+        $r = $wpdb->get_row("SELECT COUNT(ID) AS count FROM wp_posts AS p LEFT JOIN wp_postmeta AS pm ON (pm.post_id = p.ID AND pm.meta_key = 'shopware_exporter_random_id') WHERE pm.meta_value IS NULL AND p.post_type = 'shop_order';", ARRAY_A);
+        $count = (int) $r['count'];
+        // only if any random ids are missing
+        if ($count > 0) {
+            $missing = $wpdb->get_results("SELECT ID AS post_id FROM wp_posts AS p LEFT JOIN wp_postmeta AS pm ON (pm.post_id = p.ID AND pm.meta_key = 'shopware_exporter_random_id') WHERE pm.meta_value IS NULL AND p.post_type = 'shop_order';", ARRAY_A);
+            foreach($missing as $order_id) {
+                $order_id  = $order_id['post_id'];
+                update_post_meta($order_id, 'shopware_exporter_random_id', self::getRandomId());
+            }
+        }
+    }
+    
     /**
      * prevent duplicates by adding a random unique id
      */
@@ -728,6 +757,26 @@ class Admin {
         // otherwise the user already has a random id – do nothing
     }
     
+    /**
+     * prevent duplicates by adding a random unique id
+     */
+    public function shopware_exporter_add_order_random_id($order_id) {
+        $meta = get_metadata( 'post', $order_id, 'shopware_exporter_random_id', true );
+        $random_id = self::getRandomId();
+
+        if (is_array($meta)) {
+            // there are too many – this should never happen
+            delete_post_meta($order_id, 'shopware_exporter_random_id');
+            update_post_meta($order_id, 'shopware_exporter_random_id', $random_id);
+        }
+
+        if (false === $meta) {
+            // only update/add if not existent
+            update_post_meta($order_id, 'shopware_exporter_random_id', $random_id);
+        }
+        // otherwise the user already has a random id – do nothing
+    }
+
     public static function getNumbers($min=1,$max=10,$count=1,$margin=0) 
     {
         $range = range(0,$max-$min);
