@@ -59,7 +59,7 @@ class Plugin {
      * @access   protected
      * @var      string    $version    The current version of the plugin.
      */
-    protected $version = '0.0.13';
+    protected $version = '0.0.14';
 
     /**
      * Define the core functionality of the plugin.
