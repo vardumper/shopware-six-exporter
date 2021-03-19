@@ -27,6 +27,31 @@ use Ramsey\Uuid\Uuid;
  */
 class ExportGuests extends ExportCustomers {
     
+    private $csv;
+    
+    public function __construct()
+    {
+        $this->csv = Writer::createFromString();
+        $this->csv->setDelimiter(';');
+    }
+    
+    public function export() {
+        //insert the header
+        $headers = $this->getHeaders();
+        $this->csv->insertOne($headers);
+        
+        $records = self::getRecords();
+        
+        $this->csv->insertAll($records);
+        
+        return $this;
+    }
+    
+    public function getCsv() : string
+    {
+        return $this->csv->getContent();
+    }
+    
     public static function getRecords(bool $random = false) : array
     {
         error_reporting(E_ALL);
@@ -94,12 +119,21 @@ AND (
     cu.meta_value = '0'
 )
 GROUP  BY p.ID 
-ORDER  BY p.ID DESC
-%s;",   
+ORDER  BY p.ID ASC
+%s;",
             $random ? " LIMIT 1 " : " "
         );
-//         var_dump($query);
+//         var_dump($query);die;
         $results = $wpdb->get_results($query, ARRAY_A);
+        
+        /**
+         * Get rid of returning customers, we import the data used when the email last appeared
+         */
+        $tmp = [];
+        foreach ($results as $result) {
+            $tmp[$result['email']] = $result;
+        }
+        $results = array_values($tmp); // reindex array
         
         /**
          * Loop over results once and add additional info, do basic sanitization, etc
@@ -143,15 +177,6 @@ ORDER  BY p.ID DESC
             $results[$i] = $result;
             $i++;
         }
-        
-        /**
-         * Get rid of returning customers, we import the data used when the email last appeared
-         */
-        $tmp = [];
-        foreach ($results as $result) {
-            $tmp[$result['email']] = $result;
-        }
-        $results = array_values($tmp); // reindex array
 
         
         /**
