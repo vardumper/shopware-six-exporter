@@ -14,7 +14,7 @@
         // settings submenu onclick
         jQuery('#shopware-six-exporter #settings ul.subsubsub a').click(function(e){
             e.preventDefault();
-            jQuery('#shopware-six-exporter #settings div.content-tab ul.subsubsub li a').removeClass('current');
+            jQuery('#shopware-six-exporter #settings ul.subsubsub li a').removeClass('current');
             jQuery(this).addClass('current');
             jQuery('#shopware-six-exporter #settings .settings-tab').removeAttr('hidden').hide();
             jQuery(document.getElementById(jQuery(this).attr('data-id'))).show();

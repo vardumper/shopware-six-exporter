@@ -25,15 +25,15 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
     <div class="content-tab" id="settings">
         
         <ul class="subsubsub">
-            <li><a href="#customers" data-id="settings-customers" class="current">Customers</a> |</li>
-            <li><a href="#products" data-id="settings-products" class="disabled" style="pointer-events: none;">Products</a> |</li>
+            <li><a href="#customers" data-id="settings-customers" class="current">Customers & Guests</a> |</li>
+            <li><a href="#products" data-id="settings-products" class="disabled">Products</a> |</li>
             <li><a href="#orders" data-id="settings-orders" class="disabled" style="pointer-events: none;">Orders</a></li>
         </ul>
         <br class="clear">
         
-        <div class="settings-tab" id="settings-customers">
-            <h2>Customer Settings</h2>
-            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+            <div class="settings-tab" id="settings-customers">
+                <h2>Customer & Guest Settings</h2>
                 <fieldset>
                     <table class="form-table" role="presentation">
                         <thead>
@@ -166,16 +166,36 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
                         </tbody>
                     </table>
                 </fieldset>
-            </form>
-        </div>
-        
-        <div class="settings-tab" id="settings-products" hidden="hidden">
-            <h2>Product Settings</h2>
-        </div>
-        
-        <div class="settings-tab" id="settings-orders" hidden="hidden">
-            <h2>Order Settings</h2>
-        </div>
+            </div>
+            
+            <div class="settings-tab" id="settings-products" hidden="hidden">
+                <h2>Product Settings</h2>
+                <fieldset>
+                    <table class="form-table" role="presentation">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="25%">Setting</th>
+                                <th scope="col" width="35%">Value</th>
+                                <th scope="col" width="">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Product Some Setting</th>
+                                <td>
+                                    <input name="productSomeSetting" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productSomeSetting'] ?? ''; ?>" />
+                                </td>
+                                <td><p class="description">Some thing.</p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+            
+            <div class="settings-tab" id="settings-orders" hidden="hidden">
+                <h2>Order Settings</h2>
+            </div>
+        </form>
     </div>
     
     <div class="content-tab" id="profiles" hidden="hidden">
