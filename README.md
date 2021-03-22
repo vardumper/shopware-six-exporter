@@ -39,6 +39,7 @@ Whenever assinging a default value for country or sales channel is not enough, y
 
 ## Roadmap
 * ~~v0.0.* initial user/customer export~~
-* v0.1.0 guest user export finished
+* v0.1.0 Guest user export finished
 * v0.2.0 Product export finished
 * v0.3.0 Order export finished
+* v0.4.0 Full Translation into german and Public Plugin Release
