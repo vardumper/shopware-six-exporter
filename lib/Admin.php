@@ -115,7 +115,7 @@ class Admin {
         }
         return (int) $value;
     }
-    
+
     public function filter_customer_active(?int $value, int $user_id, array $row, $default = null) : ?int 
     {
         if (is_null($value) || empty($value)) {
