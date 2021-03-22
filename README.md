@@ -38,8 +38,8 @@ If you import multiple WooCommerce installations into a single Shopware installa
 Whenever assinging a default value for country or sales channel is not enough, you can use the plugin filters to achieve complex mappings. Read more about how ti use them [here](https://github.com/vardumper/shopware-six-exporter/wiki/Advanced-Mappings).
 
 ## Roadmap
-* ~~v0.0.* initial user/customer export~~
-* v0.1.0 Guest user export finished
+* ~~v0.0.* initial user/customer export~~ released
+* ~~v0.1.0 Guest user export finished~~ released
 * v0.2.0 Product export finished
 * v0.3.0 Order export finished
 * v0.4.0 Full Translation into german and Public Plugin Release
