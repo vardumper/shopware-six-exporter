@@ -132,6 +132,30 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
                             </tr>
                             
                             <tr>
+                                <th scope="row">Guest Export Chunk Size (optional)</th>
+                                <td>
+                                    <input name="guestChunkSize" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['guestChunkSize']; ?>" />
+                                </td>
+                                <td>Breaks down the SQL Query into smaller chunks. If empty chunks of 5000 guest orders will be processed sequentially in order to reduce DB resources used.</td>
+                            </tr>
+                            
+                            <tr>
+                                <th scope="row">Guest Export Limit (optional)</th>
+                                <td>
+                                    <input name="guestLimit" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['guestLimit']; ?>" />
+                                </td>
+                                <td>This allows you to define how many guests you want to export at once. If left empty, all guests will be exported. This might be required if you have many hundreds of thousands of orders.</td>
+                            </tr>
+                            
+                            <tr>
+                                <th scope="row">Guest Export Offest (optional)</th>
+                                <td>
+                                    <input name="guestOffset" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['guestOffset']; ?>" />
+                                </td>
+                                <td>If left empty, exporting guests will start with the first guest order found. This is supposed to be used together with the 'Guest Export Limit'.</td>
+                            </tr>
+                            
+                            <tr>
                                 <th scope="row"></th>
                                 <td>
                                     <input type="hidden" name="action" value="save" />

@@ -41,20 +41,23 @@ class ExportGuests extends ExportCustomers {
         $headers = $this->getHeaders();
         $this->csv->insertOne($headers);
         
-        $total = $this->getTotal();
-        $offset = 0;
-        $total_queries = ceil($total / self::CHUNK_SIZE);
+        $limit = $this->getLimit();
+        $chunksize = apply_filters('shopware_six_exporter_filter_guest_chunksize', self::CHUNK_SIZE);
+        $offset = apply_filters('shopware_six_exporter_filter_guest_offset', 0); // by default start with offset 0, otherwise you need to explicitly set it.
+        
+        $total_queries = ceil($limit / $chunksize);
+        
         $i = 0;
         while ($i <= $total_queries) {
-            $records = self::getRecords(false, self::CHUNK_SIZE, $offset);
+            $records = self::getRecords(false, $chunksize, $offset);
             $this->csv->insertAll($records);
-            $offset = $offset + self::CHUNK_SIZE;
+            $offset = $offset + $chunksize;
             $i++;
         }
         return $this;
     }
     
-    public function getTotal() : int {
+    public function getLimit() : int {
         global $wpdb;
         
         $r = $wpdb->get_row("SELECT
@@ -69,8 +72,9 @@ class ExportGuests extends ExportCustomers {
             cu.meta_value = '0'
             )
             ORDER  BY p.ID ASC;", ARRAY_A);
-        return (int) $r['count'];
+        return apply_filters('shopware_six_exporter_filter_guest_limit', (int) $r['count']);
     }
+    
     public function getCsv() : string
     {
         return $this->csv->getContent();

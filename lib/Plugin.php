@@ -100,16 +100,21 @@ class Plugin {
     private function define_admin_hooks() {
 
         $plugin_admin = new Admin( $this );
-
+        
+        $this->loader->add_filter( 'admin_footer_text', $plugin_admin, 'footer_admin_text');
+        
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
         $this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
         $this->loader->add_action('admin_menu', $plugin_admin, 'admin_menu'); // menu
-
+        $this->loader->add_filter('shopware_six_exporter_filter_guest_chunksize', $plugin_admin, 'filter_guest_chunksize', 10, 1);
+        $this->loader->add_filter('shopware_six_exporter_filter_guest_offset', $plugin_admin, 'filter_guest_offset', 10, 1);
+        $this->loader->add_filter('shopware_six_exporter_filter_guest_limit', $plugin_admin, 'filter_guest_limit', 10, 1);
+        
         // prevent duplicates customers
         $this->loader->add_action('user_register', $plugin_admin, 'shopware_exporter_add_customer_random_id', 99, 1 ); // on all inserts (products, action-schedules, posts, etc.)
         $this->loader->add_action('woocommerce_created_customer', $plugin_admin, 'shopware_exporter_add_customer_random_id', 99, 1); // upon customer creation (register form)
-        // prevent duplicates guests
+        // prevent duplicates guests & orders
         $this->loader->add_action('wp_insert_post', $plugin_admin, 'shopware_exporter_add_order_random_id', 99, 1 ); // on all inserts (products, action-schedules, posts, etc.)
         $this->loader->add_action('woocommerce_checkout_order_processed', $plugin_admin, 'shopware_exporter_add_order_random_id', 10, 1); // upon creation
         $this->loader->add_action('woocommerce_thankyou', $plugin_admin, 'shopware_exporter_add_order_random_id', 10, 1); // after order creation (may not reach here, if sent to paypal for example)
@@ -119,7 +124,7 @@ class Plugin {
         $this->loader->add_action('themes_loaded', $plugin_admin, 'parse_request');
         $this->loader->add_action('after_setup_theme', $plugin_admin, 'download_csv');
 
-        // customer filters
+        // customer & guest filters
         $this->loader->add_filter('shopware_six_exporter_filter_customer_id', $plugin_admin, 'filter_customer_id', 10, 4);
         $this->loader->add_filter('shopware_six_exporter_filter_customer_active', $plugin_admin, 'filter_customer_active', 10, 4);
         $this->loader->add_filter('shopware_six_exporter_filter_customer_affiliateCode', $plugin_admin, 'filter_customer_affiliateCode', 10, 4);
@@ -215,7 +220,6 @@ class Plugin {
 
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_frontend, 'enqueue_styles' );
         $this->loader->add_action( 'wp_enqueue_scripts', $plugin_frontend, 'enqueue_scripts' );
-
     }
 
     /**

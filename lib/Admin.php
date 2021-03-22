@@ -86,6 +86,35 @@ class Admin {
             exit;
         }
     }
+    public function footer_admin_text()
+    {
+        if ( isset($_GET['page']) && $_GET['page'] === 'shopware-six-exporter' ) { 
+            echo 'Thank you for creating with <del><a style="pointer-events: none;" href="https://wordpress.org/">WordPress</a></del> <a href="https://www.shopware.com/">Shopware</a>';
+        } else {
+            _e('Thank you for creating with <a href="https://wordpress.org/">WordPress</a>');
+        }
+    }
+    
+    public function filter_guest_offset(int $value) : int {
+        if (isset($this->settings['guestOffest']) && is_int($this->settings['guestOffest'])) {
+            return (int) $this->settings['guestOffest'];
+        }
+        return $value; // 0
+    }
+    
+    public function filter_guest_chunksize(int $value) : int {
+        if (isset($this->settings['guestChunkSize']) && $this->settings['guestChunkSize'] > 0) {
+            return (int) $this->settings['guestChunkSize'];
+        }
+        return $value; // 5000
+    }
+    
+    public function filter_guest_limit(int $value) : int {
+        if (isset($this->settings['guestLimit']) && $this->settings['guestLimit'] > 0) {
+            return (int) $this->settings['guestLimit'];
+        }
+        return (int) $value;
+    }
     
     public function filter_customer_active(?int $value, int $user_id, array $row, $default = null) : ?int 
     {
