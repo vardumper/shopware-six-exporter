@@ -27,6 +27,7 @@ use Ramsey\Uuid\Uuid;
  */
 class ExportGuests extends ExportCustomers {
     
+    private const CHUNK_SIZE = 5000;
     private $csv;
     
     public function __construct()
@@ -40,19 +41,42 @@ class ExportGuests extends ExportCustomers {
         $headers = $this->getHeaders();
         $this->csv->insertOne($headers);
         
-        $records = self::getRecords();
-        
-        $this->csv->insertAll($records);
-        
+        $total = $this->getTotal();
+        $offset = 0;
+        $total_queries = ceil($total / self::CHUNK_SIZE);
+        $i = 0;
+        while ($i <= $total_queries) {
+            $records = self::getRecords(false, self::CHUNK_SIZE, $offset);
+            $this->csv->insertAll($records);
+            $offset = $offset + self::CHUNK_SIZE;
+            $i++;
+        }
         return $this;
     }
     
+    public function getTotal() : int {
+        global $wpdb;
+        
+        $r = $wpdb->get_row("SELECT
+        COUNT(p.ID) AS `count`
+        FROM wp_posts AS p
+        LEFT JOIN wp_postmeta cu ON ( p.ID = cu.post_id  AND cu.meta_key = '_customer_user' )
+        WHERE p.post_type = 'shop_order'
+        AND
+        (
+            cu.meta_id IS NULL
+            OR
+            cu.meta_value = '0'
+            )
+            ORDER  BY p.ID ASC;", ARRAY_A);
+        return (int) $r['count'];
+    }
     public function getCsv() : string
     {
         return $this->csv->getContent();
     }
     
-    public static function getRecords(bool $random = false) : array
+    public static function getRecords(bool $random = false, int $limit = null, int $offset = null) : array
     {
         error_reporting(E_ALL);
         ini_set('display_errors', '1');
@@ -75,7 +99,7 @@ class ExportGuests extends ExportCustomers {
 	   MAX( CASE WHEN pm.meta_key = '_billing_city' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.city`,
 	   MAX( CASE WHEN pm.meta_key = '_billing_company' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.company`,
 	   MAX( CASE WHEN pm.meta_key = '_billing_country' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.countryId`,
-	   MAX( CASE WHEN pm.meta_key = '_billing_state' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.countryState`,
+	   MAX( CASE WHEN pm.meta_key = '_billing_state' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.countryStateId`,
 	   MAX( CASE WHEN pm.meta_key = '_billing_first_name' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.firstName`,
 	   MAX( CASE WHEN pm.meta_key = '_billing_last_name' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.lastName`,
 	   MAX( CASE WHEN pm.meta_key = '_billing_phone' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultBillingAddress.phoneNumber`,
@@ -90,7 +114,7 @@ class ExportGuests extends ExportCustomers {
 	   MAX( CASE WHEN pm.meta_key = '_shipping_city' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.city`,
 	   MAX( CASE WHEN pm.meta_key = '_shipping_company' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.company`,
 	   MAX( CASE WHEN pm.meta_key = '_shipping_country' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.countryId`,
-	   MAX( CASE WHEN pm.meta_key = '_shipping_state' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.countryState`,
+	   MAX( CASE WHEN pm.meta_key = '_shipping_state' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.countryStateId`,
 	   MAX( CASE WHEN pm.meta_key = '_shipping_first_name' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.firstName`,
 	   MAX( CASE WHEN pm.meta_key = '_shipping_last_name' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.lastName`,
 	   MAX( CASE WHEN pm.meta_key = '_shipping_phone' and p.ID = pm.post_id THEN pm.meta_value END ) as `defaultShippingAddress.phoneNumber`,
@@ -109,19 +133,16 @@ FROM wp_posts AS p
 JOIN wp_postmeta pm ON p.ID = pm.post_id 
 LEFT JOIN wp_postmeta cu ON ( p.ID = cu.post_id  AND cu.meta_key = '_customer_user' )
 WHERE p.post_type = 'shop_order'
-AND (
-    NOT EXISTS (
-        SELECT *
-        FROM wp_postmeta pm
-        WHERE pm.post_id = p.ID AND pm.meta_key = '_customer_user' 
-    )
-    OR 
+AND 
+(
+    cu.meta_id IS NULL
+    OR
     cu.meta_value = '0'
 )
 GROUP  BY p.ID 
 ORDER  BY p.ID ASC
 %s;",
-            $random ? " LIMIT 1 " : " "
+            $random ? " LIMIT 1 " : " LIMIT $offset, $limit "
         );
 //         var_dump($query);die;
         $results = $wpdb->get_results($query, ARRAY_A);

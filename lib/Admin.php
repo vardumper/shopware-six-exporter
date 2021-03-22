@@ -117,20 +117,23 @@ class Admin {
         if (!empty($value)) {
             return $value;
         }
-        switch ($_POST['action']) {
-            case 'Export Customers':
-                if (false === get_user_meta($user_id, 'shopware_exporter_random_id', true)) {
-                    add_user_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
-                }
-                return get_user_meta($user_id, 'shopware_exporter_random_id', true);
-                break;
-            case 'Export Guests':
-                if (false === get_post_meta($user_id, 'shopware_exporter_random_id', true)) {
-                    add_post_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
-                }
-                return get_post_meta($user_id, 'shopware_exporter_random_id', true);
-                break;
+        if (isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'Export Customers':
+                    if (false === get_user_meta($user_id, 'shopware_exporter_random_id', true)) {
+                        add_user_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
+                    }
+                    return get_user_meta($user_id, 'shopware_exporter_random_id', true);
+                    break;
+                case 'Export Guests':
+                    if (false === get_post_meta($user_id, 'shopware_exporter_random_id', true)) {
+                        add_post_meta($user_id, 'shopware_exporter_random_id', self::getRandomId());
+                    }
+                    return get_post_meta($user_id, 'shopware_exporter_random_id', true);
+                    break;
+            }
         }
+        return null;
     }
     
     public function filter_customer_birthday($value, int $user_id, array $row, $default = null) : ?string
