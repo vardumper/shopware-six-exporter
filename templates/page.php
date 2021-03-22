@@ -3,6 +3,7 @@
 use vardumper\Shopware_Six_Exporter\Plugin;
 use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
 use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
+use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
 ?>
 <div class="wrap" id="shopware-six-exporter">
     <?php if ( isset($_POST) && count($_POST) > 0 && !empty($_POST['action']) ) { ?>
@@ -211,7 +212,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
                 <tr>
                     <th scope="row">Product Profile</th>
                     <td>
-                        <a class="button button-secondary button-large disabled" title="MySQL query to add the full customer import/export profile" href="<?php echo plugin_dir_url(__FILE__) ?>product-profile.sql">Download</a>
+                        <a class="button button-secondary button-large" title="MySQL query to add the full customer import/export profile" href="<?php echo plugin_dir_url(__FILE__) ?>product-profile.sql">Download</a>
                     </td>
                 </tr>
                 <tr>
@@ -231,7 +232,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
         <ul class="subsubsub">
             <li><a href="#customers" data-id="preview-customers" class="current">Customers</a> |</li>
             <li><a href="#guests" data-id="preview-guests" class="">Guests</a> |</li>
-            <li><a href="#products" data-id="preview-products" class="disabled" style="pointer-events: none;">Products</a> |</li>
+            <li><a href="#products" data-id="preview-products" class="disabled">Products</a> |</li>
             <li><a href="#orders" data-id="preview-orders" class="disabled" style="pointer-events: none;">Orders</a></li>
         </ul>
         <br class="clear" />
@@ -257,7 +258,8 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
                 </tbody>
             </table>
         </div>
-        <div class="preview-tab" id="preview-guests">
+        
+        <div class="preview-tab" id="preview-guests" hidden="hidden">
             <h3>Guest</h3>
             <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
                 <thead>
@@ -274,6 +276,32 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
                             <th style="text-align:right;"><?php echo $name; ?></th>
                             <td><?php echo $guests[0][$name]; ?></td>
                         </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="preview-tab" id="preview-products" hidden="hidden">
+            <h3>Product</h3>
+            <table class="form-table preview wp-list-table widefat fixed striped table-view-list posts" role="presentation">
+                <thead>
+                    <tr>
+                        <th width="25%" style="width:25%;text-align:right;">Column</th>
+                        <th width="75%" style="text-align:center;">Product</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $guests = ExportProducts::getRecords(true);
+                    if (!empty($guests)) {
+                        foreach(Exportproducts::getHeaders() as $name) { ?>
+                            <tr>
+                                <th style="text-align:right;"><?php echo $name; ?></th>
+                                <td><?php echo $guests[0][$name]; ?></td>
+                            </tr>
+                        <?php } 
+                    } else { ?>
+                        <tr><td colspan="2">No products found</td></tr>
                     <?php } ?>
                 </tbody>
             </table>
@@ -322,9 +350,11 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
             </fieldset>
         </form>
     </div>
+    
     <hr />
     
     <div id="poststuff">
+        <span style="clear:both; display:block;height:40px; width:100%;"></span>
         <div id="post-body" class="metabox-holder columns-2">
             <div id="post-body-content">
                 <div class="meta-box-sortables ui-sortable">
