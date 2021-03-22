@@ -42,4 +42,4 @@ Whenever assinging a default value for country or sales channel is not enough, y
 * ~~v0.1.0 Guest user export finished~~ released
 * v0.2.0 Product export finished
 * v0.3.0 Order export finished
-* v0.4.0 Full Translation into german and Public Plugin Release
+* v1.0.0 Fully translated into german & public plugin release via wordress.org
