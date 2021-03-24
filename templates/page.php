@@ -249,11 +249,15 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                 <tbody>
                     <?php 
                     $customers = ExportCustomers::getRecords(true);
-                    foreach(ExportCustomers::getHeaders() as $name) { ?>
-                        <tr>
-                            <th style="text-align:right;"><?php echo $name; ?></th>
-                            <td><?php echo $customers[0][$name]; ?></td>
-                        </tr>
+                    if (!empty($customers)) {
+                        foreach(ExportCustomers::getHeaders() as $name) { ?>
+                            <tr>
+                                <th style="text-align:right;"><?php echo $name; ?></th>
+                                <td><?php echo $customers[0][$name]; ?></td>
+                            </tr>
+                        <?php } 
+                    } else { ?>
+                        <tr><td colspan="2">No customers found</td></tr>
                     <?php } ?>
                 </tbody>
             </table>
@@ -271,11 +275,15 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                 <tbody>
                     <?php 
                     $guests = ExportGuests::getRecords(true);
-                    foreach(ExportGuests::getHeaders() as $name) { ?>
+                    if (!empty($guests)) {
+                        foreach(ExportGuests::getHeaders() as $name) { ?>
                         <tr>
                             <th style="text-align:right;"><?php echo $name; ?></th>
                             <td><?php echo $guests[0][$name]; ?></td>
                         </tr>
+                        <?php }
+                    } else { ?>
+                        <tr><td colspan="2">No guests found</td></tr>
                     <?php } ?>
                 </tbody>
             </table>
@@ -329,7 +337,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                         <tr>
                             <th scope="row">Product Export</th>
                             <td>
-                                <input name="action" class="button button-primary button-large disabled" title="not implemented yet" type="submit" value="Export Products" />
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Products" />
                             </td>
                         </tr>
                     </tbody>

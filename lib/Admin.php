@@ -13,6 +13,7 @@ namespace vardumper\Shopware_Six_Exporter;
 
 use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
 use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
+use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
 
 /**
  * The dashboard-specific functionality of the plugin.
