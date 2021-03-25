@@ -182,17 +182,34 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="row">Product Some Setting</th>
+                                <th scope="row">Include Product Drafts</th>
                                 <td>
-                                    <input name="productSomeSetting" class="large-text" type="text" length="32" maxlength="32" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productSomeSetting'] ?? ''; ?>" />
+                                    <input id="productIncludeDrafts" name="productIncludeDrafts" class="" type="checkbox" <?php if (json_decode(get_option(Plugin::SETTINGS_KEY), true)['productIncludeDrafts'] === 'yes') { ?>checked="checked"<?php } ?> value="yes" />
                                 </td>
-                                <td><p class="description">Some thing.</p></td>
+                                <td><p class="description">If activated, product drafts will be exported as well. Otherwise only products with status publish will be included.</p></td>
+                            </tr>
+                            
+                            <tr>
+                                <th scope="row">Prevent Duplicates</th>
+                                <td>
+                                    <input id="productPreventDups" name="productPreventDups" class="" type="checkbox" <?php if (json_decode(get_option(Plugin::SETTINGS_KEY), true)['productPreventDups'] === 'yes') { ?>checked="checked"<?php } ?> value="yes" />
+                                </td>
+                                <td><p class="description">If checked, this plugin will generate random unique IDs, store them in a new usermeta field with key <samp>shopware_exporter_random_id</samp>. This random ID is then used in the CSV file as autoIncrement ID. This allows you to re-import the same CSV file several times. Shopware will then update products instead of create duplicates. When activated, this plugin will automatically generate random unique IDs for newly created products.</p></td>
+                            </tr>
+                            
+                            <tr>
+                                <th scope="row"></th>
+                                <td>
+                                    <input type="hidden" name="action" value="save" />
+                                    <input name="action" class="button button-secondary button-large" type="submit" value="Save Settings" />
+                                </td>
+                                <td>When "Prevent Duplicates" is activated, a unique ID will be attached as meta value to all of your products. So don't be surprised if saving the settings can take many minutes to finish.
                             </tr>
                         </tbody>
                     </table>
                 </fieldset>
             </div>
-            
+
             <div class="settings-tab" id="settings-orders" hidden="hidden">
                 <h2>Order Settings</h2>
             </div>

@@ -734,6 +734,19 @@ class Admin {
                 $this->shopware_exporter_add_customer_random_id_batch();
                 $this->shopware_exporter_add_order_random_id_batch();
             }
+            
+            if (isset($data['productPreventDups']) && $data['productPreventDups'] === 'yes') {
+                $this->shopware_exporter_add_product_random_id_batch();
+            }
+
+            if (!isset($data['productPreventDups'])) {
+                $data['productPreventDups'] = 'no';
+            }
+
+            if (!isset($data['productIncludeDrafts'])) {
+                $data['productIncludeDrafts'] = 'no';
+            }
+
             unset($data['action']); // remove junk
             update_option(Plugin::SETTINGS_KEY, json_encode($data, JSON_PRETTY_PRINT  )); // save
         }
@@ -765,6 +778,22 @@ class Admin {
         // only if any random ids are missing
         if ($count > 0) {
             $missing = $wpdb->get_results("SELECT ID AS post_id FROM wp_posts AS p LEFT JOIN wp_postmeta AS pm ON (pm.post_id = p.ID AND pm.meta_key = 'shopware_exporter_random_id') WHERE pm.meta_value IS NULL AND p.post_type = 'shop_order';", ARRAY_A);
+            foreach($missing as $order_id) {
+                $order_id  = $order_id['post_id'];
+                update_post_meta($order_id, 'shopware_exporter_random_id', self::getRandomId());
+            }
+        }
+    }
+    
+    public function shopware_exporter_add_product_random_id_batch() : void
+    {
+        global $wpdb;
+        
+        $r = $wpdb->get_row("SELECT COUNT(ID) AS count FROM wp_posts AS p LEFT JOIN wp_postmeta AS pm ON (pm.post_id = p.ID AND pm.meta_key = 'shopware_exporter_random_id') WHERE pm.meta_value IS NULL AND p.post_type IN ('product', 'product_variation');", ARRAY_A);
+        $count = (int) $r['count'];
+        // only if any random ids are missing
+        if ($count > 0) {
+            $missing = $wpdb->get_results("SELECT ID AS post_id FROM wp_posts AS p LEFT JOIN wp_postmeta AS pm ON (pm.post_id = p.ID AND pm.meta_key = 'shopware_exporter_random_id') WHERE pm.meta_value IS NULL AND p.post_type IN ('product', 'product_variation');", ARRAY_A);
             foreach($missing as $order_id) {
                 $order_id  = $order_id['post_id'];
                 update_post_meta($order_id, 'shopware_exporter_random_id', self::getRandomId());
@@ -882,7 +911,8 @@ class Admin {
             \plugin_dir_url( dirname( __FILE__ ) ) . 'dist/styles/shopware-six-exporter-admin.css',
             array(),
             $this->plugin->get_version(),
-            'all' );
+            'all'
+        );
 
     }
 
@@ -910,8 +940,7 @@ class Admin {
             \plugin_dir_url( dirname( __FILE__ ) ) . 'dist/scripts/shopware-six-exporter-admin.js',
             array( 'jquery' ),
             $this->plugin->get_version(),
-            false );
-
+            false 
+        );
     }
-
 }

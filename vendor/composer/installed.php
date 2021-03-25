@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '9a95f59359db975dd6bd7ce35d846dbccd0c26d4',
+    'reference' => '66ad1542ceac327f4b5a797fe660ca3b14c9a4e0',
     'name' => 'vardumper/shopware-six-exporter',
   ),
   'versions' => 
@@ -93,7 +93,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '9a95f59359db975dd6bd7ce35d846dbccd0c26d4',
+      'reference' => '66ad1542ceac327f4b5a797fe660ca3b14c9a4e0',
     ),
   ),
 );
