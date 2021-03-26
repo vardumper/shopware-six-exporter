@@ -24,7 +24,6 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
     </h2>
     
     <div class="content-tab" id="settings">
-        
         <ul class="subsubsub">
             <li><a href="#customers" data-id="settings-customers" class="current">Customers & Guests</a> |</li>
             <li><a href="#products" data-id="settings-products" class="disabled">Products</a> |</li>
@@ -198,6 +197,14 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                             </tr>
                             
                             <tr>
+                                <th scope="row">Product Default Currency ID</th>
+                                <td>
+                                    <input id="productDefaultCurrencyId" name="productDefaultCurrencyId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productDefaultCurrencyId'] ?? ''; ?>" />
+                                </td>
+                                <td><p class="description">Currency ID (32 character Uuid) of the WooCommerce currency you define your prices in.</p></td>
+                            </tr>
+                            
+                            <tr>
                                 <th scope="row"></th>
                                 <td>
                                     <input type="hidden" name="action" value="save" />
@@ -249,7 +256,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
         <ul class="subsubsub">
             <li><a href="#customers" data-id="preview-customers" class="current">Customers</a> |</li>
             <li><a href="#guests" data-id="preview-guests" class="">Guests</a> |</li>
-            <li><a href="#products" data-id="preview-products" class="disabled">Products</a> |</li>
+            <li><a href="#products" data-id="preview-products" class="">Products</a> |</li>
             <li><a href="#orders" data-id="preview-orders" class="disabled" style="pointer-events: none;">Orders</a></li>
         </ul>
         <br class="clear" />
@@ -317,12 +324,12 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                 </thead>
                 <tbody>
                     <?php 
-                    $guests = ExportProducts::getRecords(true);
-                    if (!empty($guests)) {
-                        foreach(Exportproducts::getHeaders() as $name) { ?>
+                    $products = ExportProducts::getRecords(true);
+                    if (!empty($products)) {
+                        foreach(ExportProducts::getHeaders() as $name) { ?>
                             <tr>
                                 <th style="text-align:right;"><?php echo $name; ?></th>
-                                <td><?php echo $guests[0][$name]; ?></td>
+                                <td><?php echo $products[0][$name]; ?></td>
                             </tr>
                         <?php } 
                     } else { ?>
@@ -354,7 +361,7 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                         <tr>
                             <th scope="row">Product Export</th>
                             <td>
-                                <input name="action" class="button button-primary button-large" type="submit" value="Export Products" />
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Product Media" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Categories" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Attributes" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Simple Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Variable Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Variations" />
                             </td>
                         </tr>
                     </tbody>

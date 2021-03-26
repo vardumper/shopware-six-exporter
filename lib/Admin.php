@@ -65,7 +65,13 @@ class Admin {
                 case 'Export Guests':
                     $exporter = new ExportGuests();
                     break;
-                case 'Export Products':
+                case 'Export Simple Products':
+                    $exporter = new ExportProducts();
+                    break;
+                case 'Export Variable Products':
+                    $exporter = new ExportProducts();
+                    break;
+                case 'Export Product Variations':
                     $exporter = new ExportProducts();
                     break;
                 case 'Export Orders':
