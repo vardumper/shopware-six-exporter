@@ -180,6 +180,23 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                             </tr>
                         </thead>
                         <tbody>
+                        
+                            <tr>
+                                <th scope="row">Post Media Parent Folder ID</th>
+                                <td>
+                                    <input id="postMediaFolderId" name="postMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['postMediaFolderId'] ?? ''; ?>"/>
+                                </td>
+                                <td><p class="description">Folder ID (32 character Uuid). Default folder for post and page images. (probably your CMS Media folder ID)</p></td>
+                            </tr>
+                            
+                            <tr>
+                                <th scope="row">Product Media Parent Folder ID</th>
+                                <td>
+                                    <input id="productMediaFolderId" name="productMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productMediaFolderId'] ?? ''; ?>"/>
+                                </td>
+                                <td><p class="description">Folder ID (32 character Uuid). Default folder for product images. (probably your CMS Media folder ID)</p></td>
+                            </tr>
+                            
                             <tr>
                                 <th scope="row">Include Product Drafts</th>
                                 <td>

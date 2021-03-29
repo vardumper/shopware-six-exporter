@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'vardumper\\Shopware_Six_Exporter\\' => array($baseDir . '/lib'),
+    'WebPConvert\\' => array($vendorDir . '/rosell-dk/webp-convert/src'),
     'Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),

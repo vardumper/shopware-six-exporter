@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '66ad1542ceac327f4b5a797fe660ca3b14c9a4e0',
+    'reference' => '61d1a37d8eed7724de2b5efdd404911d7fbba854',
     'name' => 'vardumper/shopware-six-exporter',
   ),
   'versions' => 
@@ -63,6 +63,15 @@
         0 => '4.1.1',
       ),
     ),
+    'rosell-dk/webp-convert' => 
+    array (
+      'pretty_version' => '1.3.9',
+      'version' => '1.3.9.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '3680c278f08748054b4ab3ea7855be8984f008aa',
+    ),
     'roundcube/plugin-installer' => 
     array (
       'replaced' => 
@@ -93,7 +102,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '66ad1542ceac327f4b5a797fe660ca3b14c9a4e0',
+      'reference' => '61d1a37d8eed7724de2b5efdd404911d7fbba854',
     ),
   ),
 );

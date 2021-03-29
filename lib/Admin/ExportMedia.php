@@ -14,6 +14,7 @@ namespace vardumper\Shopware_Six_Exporter\Admin;
 use League\Csv\Writer;
 use vardumper\Shopware_Six_Exporter\Plugin;
 use Ramsey\Uuid\Uuid;
+use WebPConvert\WebPConvert;
 
 class ExportMedia {
     /** @var Writer $csv */
@@ -96,26 +97,24 @@ class ExportMedia {
          * @var array $images
          */
         $attachments = $wpdb->get_results("SELECT p.ID AS post_id,
-	   p.post_title,
-	   p.post_name,
-       p.post_content, 
-       p.post_excerpt,
-       p.post_type,
-       p.post_parent,
-       attachment.ID AS image_id, 
-       attachment.guid AS url,
-       attachment.post_name AS image_name,
-       attachment.post_content AS image_description,
-       attachment.post_excerpt AS image_caption,
-       attachment.post_content AS image_description,
-       attachment.post_mime_type AS image_type,
-       alt.meta_value AS image_alt
-FROM   wp_posts AS p
-JOIN wp_posts AS attachment ON (p.ID = attachment.post_parent AND attachment.post_type = 'attachment' AND attachment.post_mime_type LIKE 'image/%')
-LEFT JOIN wp_postmeta AS alt ON (alt.post_id = attachment.ID AND alt.meta_key = '_wp_attachment_image_alt')
-WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_A);
-        
-        $mediaFolderParentId = (isset($this->settings['mediaFolderParentId']) && !empty($this->settings['mediaFolderParentId'])) ? $this->settings['mediaFolderParentId'] : null;
+               p.post_title,
+               p.post_name,
+               p.post_content, 
+               p.post_excerpt,
+               p.post_type,
+               p.post_parent,
+               attachment.ID AS image_id, 
+               attachment.guid AS url,
+               attachment.post_name AS image_name,
+               attachment.post_content AS image_description,
+               attachment.post_excerpt AS image_caption,
+               attachment.post_content AS image_description,
+               attachment.post_mime_type AS image_type,
+               alt.meta_value AS image_alt
+        FROM   wp_posts AS p
+        JOIN wp_posts AS attachment ON (p.ID = attachment.post_parent AND attachment.post_type = 'attachment' AND attachment.post_mime_type LIKE 'image/%')
+        LEFT JOIN wp_postmeta AS alt ON (alt.post_id = attachment.ID AND alt.meta_key = '_wp_attachment_image_alt')
+        WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_A);
         
         foreach($attachments as $post) {
             $folder_name = $post['post_name'];
@@ -127,12 +126,12 @@ WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_
                 'id' => get_post_meta($post['image_id'], 'shopware_six_exporter_uuid', true),
                 'mediaFolder.id' => null,
                 'mediaFolder.name' => sanitize_file_name(strtolower($folder_name)), // one folder for each post/page/product
-                'mediaFolder.parent.id' => $mediaFolderParentId, // something like the product images folder
+                'mediaFolder.parent.id' => in_array($post['post_type'], ['product','product_variation']) ? $this->settings['productMediaFolderId'] : $this->settings['postMediaFolderId'], // something like the product images folder
                 'url' => $post['url'],
                 'private' => 0,
                 'type' => $post['image_type'],
                 'title' => $this->filenameToTitle($post['image_name']),
-                    'alt' => $this->filenameToTitle($post['image_alt']),
+                'alt' => $this->filenameToTitle($post['image_alt']),
             ];
             
             /**
@@ -149,7 +148,7 @@ WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_
                             'id' => get_post_meta($post['image_id'], 'shopware_six_exporter_uuid', true),
                             'mediaFolder.id' => null,
                             'mediaFolder.name' => sanitize_file_name(strtolower($folder_name)), // one folder for each post/page/product
-                            'mediaFolder.parent.id' => $mediaFolderParentId, // something like the product images folder
+                            'mediaFolder.parent.id' => in_array($post['post_type'], ['product','product_variation']) ? $this->settings['productMediaFolderId'] : $this->settings['postMediaFolderId'], // something like the product images folder
                             'url' => $p->guid,
                             'private' => 0,
                             'type' => $p->post_mime_type,
@@ -183,7 +182,7 @@ WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_
                             'id' => null,
                             'mediaFolder.id' => null,
                             'mediaFolder.name' => sanitize_file_name(strtolower($folder_name)), // one folder for each post/page/product
-                            'mediaFolder.parent.id' => $mediaFolderParentId, // something like the product images folder
+                            'mediaFolder.parent.id' => in_array($post['post_type'], ['product','product_variation']) ? $this->settings['productMediaFolderId'] : $this->settings['postMediaFolderId'], // something like the product images folder
                             'url' => $image->getAttribute('src'),
                             'private' => 0,
                             'type' => null,
@@ -216,12 +215,12 @@ WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_
                             'id' => null,
                             'mediaFolder.id' => null,
                             'mediaFolder.name' => sanitize_file_name(strtolower($folder_name)), // one folder for each post/page/product
-                            'mediaFolder.parent.id' => $mediaFolderParentId, // something like the product images folder
+                            'mediaFolder.parent.id' => in_array($post['post_type'], ['product','product_variation']) ? $this->settings['productMediaFolderId'] : $this->settings['postMediaFolderId'], // something like the product images folder
                             'url' => $image->getAttribute('src'),
                             'private' => 0,
                             'type' => null,
                             'title' => !empty($image->getAttribute('alt')) ? $this->filenameToTitle($image->getAttribute('alt')) : $this->filenameToTitle($path_parts['filename']),
-                                'alt' => !empty($image->getAttribute('alt')) ? $this->filenameToTitle($image->getAttribute('alt')) : $this->filenameToTitle($path_parts['filename']),
+                            'alt' => !empty($image->getAttribute('alt')) ? $this->filenameToTitle($image->getAttribute('alt')) : $this->filenameToTitle($path_parts['filename']),
                         ];
                     }
                 }
@@ -235,7 +234,30 @@ WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_
         /**
          * step 5 convert to webp and add additional rows (so we import originals & webp version)
          */
-        
+        $tmp = array_values($tmp);
+        foreach($tmp as $image) {
+            $path = parse_url($image['url'], PHP_URL_PATH);
+            $path_parts = pathinfo($path);
+//             var_dump($path_parts);
+            
+            $fullpath = ABSPATH . $path;
+            $to = str_replace($path_parts['extension'], 'webp', $fullpath);
+            if (!is_file($to)) {
+                WebPConvert::convert($fullpath, $to, ['quality' => 75]);
+            }
+            
+            $tmp[str_replace($path_parts['extension'], 'webp', $image['url'])] = [
+                'id' => null,
+                'mediaFolder.id' => null,
+                'mediaFolder.name' => $image['mediaFolder.name'], // one folder for each post/page/product
+                'mediaFolder.parent.id' => $image['mediaFolder.parent.id'], // something like the product images folder
+                'url' => str_replace($path_parts['extension'], 'webp', $image['url']),
+                'private' => 0,
+                'type' => 'image/webp',
+                'title' => $image['title'],
+                'alt' => $image['alt'],
+            ];
+        }
         
         return array_values($tmp);
     }
