@@ -49,7 +49,7 @@ class ExportCustomers {
     
     public function getCsv() : string
     {
-        return $this->csv->getContent();
+        return $this->csv->toString();
     }
     
     public static function getRecords(bool $random = false) : array 

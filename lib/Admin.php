@@ -14,6 +14,7 @@ namespace vardumper\Shopware_Six_Exporter;
 use vardumper\Shopware_Six_Exporter\Admin\ExportCustomers;
 use vardumper\Shopware_Six_Exporter\Admin\ExportGuests;
 use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
+use vardumper\Shopware_Six_Exporter\Admin\ExportMedia;
 
 /**
  * The dashboard-specific functionality of the plugin.
@@ -51,8 +52,8 @@ class Admin {
         $this->plugin = $plugin;
         $this->settings = json_decode(get_option(Plugin::SETTINGS_KEY), true);
         $this->salutations = [
-            1 => $this->settings['customerSalutationIdMale'], // male
-            2 => $this->settings['customerSalutationIdFemale'], // female
+            1 => !is_null($this->settings['customerSalutationIdMale']) ? $this->settings['customerSalutationIdMale'] : '', // male
+            2 => !is_null($this->settings['customerSalutationIdFemale']) ? $this->settings['customerSalutationIdFemale'] : '', // female
         ];
     }
 
@@ -73,6 +74,9 @@ class Admin {
                     break;
                 case 'Export Product Variations':
                     $exporter = new ExportProducts();
+                    break;
+                case 'Export Product Media':
+                    $exporter = new ExportMedia();
                     break;
                 case 'Export Orders':
                     $exporter = new ExportOrders();
@@ -681,7 +685,7 @@ class Admin {
         if (array_key_exists((int) $value, $this->salutations)) {
             return $this->salutations[(int) $value];
         }
-        return $default; // unknown
+        return !is_null($default) ? $default : ''; // unknown
     }
     
     public function filter_customer_tagIds($value, int $user_id, array $row, $default = null) : ?string

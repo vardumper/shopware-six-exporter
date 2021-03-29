@@ -77,7 +77,7 @@ class ExportGuests extends ExportCustomers {
     
     public function getCsv() : string
     {
-        return $this->csv->getContent();
+        return $this->csv->__toString();
     }
     
     public static function getRecords(bool $random = false, int $limit = null, int $offset = null) : array
