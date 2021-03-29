@@ -116,7 +116,7 @@ class CharsetConverter extends php_user_filter
             return $encoding_list[$key];
         }
 
-        throw new OutOfRangeException(sprintf('The submitted charset %s is not supported by the mbstring extension', $encoding));
+        throw new OutOfRangeException('The submitted charset '.$encoding.' is not supported by the mbstring extension.');
     }
 
     /**
@@ -174,6 +174,7 @@ class CharsetConverter extends php_user_filter
             return array_map($this, $records);
         }
 
+        /* @var \Traversable $records */
         return new MapIterator($records, $this);
     }
 

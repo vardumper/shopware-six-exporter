@@ -6,26 +6,24 @@
   "keywords": ["webp", "images", "cwebp", "imagick", "gd", "jpg2webp", "png2webp", "jpg", "png", "image conversion"],
   "scripts": {
     "ci": [
-      "@build",
       "@test",
       "@phpcs-all",
-      "@composer validate --no-check-all --strict"
+      "@composer validate --no-check-all --strict",
+      "@phpstan-global"
     ],
-    "build": [
-      "@build-wod",
-      "@build-require-all"
-    ],
+    "test": "phpunit --coverage-text",
+    "phpunit": "phpunit --coverage-text",
+    "test-no-cov": "phpunit --no-coverage",
     "cs-fix-all": [
       "php-cs-fixer fix src"
     ],
     "cs-fix": "php-cs-fixer fix",
     "cs-dry": "php-cs-fixer fix --dry-run --diff",
-    "test": "phpunit",
     "phpcs": "phpcs --standard=PSR2",
     "phpcs-all": "phpcs --standard=PSR2 src",
     "phpcbf": "phpcbf --standard=PSR2",
-    "build-wod": "php build-scripts/build-webp-on-demand.php",
-    "build-require-all": "php build-scripts/generate-require-all.php"
+    "phpstan": "vendor/bin/phpstan analyse src --level=4",
+    "phpstan-global": "~/.composer/vendor/bin/phpstan analyse src --level=4"
   },
   "extra": {
       "scripts-descriptions": {
@@ -55,6 +53,16 @@
       "role": "Collaborator"
     }
   ],
+  "require": {
+      "php": "^5.6 | ^7.0",
+      "rosell-dk/image-mime-type-guesser": "^0.3"
+  },
+  "suggest": {
+      "ext-gd": "to use GD extension for converting. Note: Gd must be compiled with webp support",
+      "ext-imagick": "to use Imagick extension for converting. Note: Gd must be compiled with webp support",
+      "ext-vips": "to use Vips extension for converting.",
+      "php-stan/php-stan": "Suggested for dev, in order to analyse code before committing"
+  },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.11",
     "phpunit/phpunit": "5.7.27",

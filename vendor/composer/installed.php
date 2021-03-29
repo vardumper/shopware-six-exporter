@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '61d1a37d8eed7724de2b5efdd404911d7fbba854',
+    'reference' => 'a152ceab171b3bd41cd98ae2d548e75567d50263',
     'name' => 'vardumper/shopware-six-exporter',
   ),
   'versions' => 
@@ -31,12 +31,12 @@
     ),
     'league/csv' => 
     array (
-      'pretty_version' => '9.6.2',
-      'version' => '9.6.2.0',
+      'pretty_version' => '9.7.0',
+      'version' => '9.7.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'f28da6e483bf979bac10e2add384c90ae9983e4e',
+      'reference' => '4cacd9c72c4aa8bdbef43315b2ca25c46a0f833f',
     ),
     'ramsey/collection' => 
     array (
@@ -63,14 +63,23 @@
         0 => '4.1.1',
       ),
     ),
-    'rosell-dk/webp-convert' => 
+    'rosell-dk/image-mime-type-guesser' => 
     array (
-      'pretty_version' => '1.3.9',
-      'version' => '1.3.9.0',
+      'pretty_version' => '0.3',
+      'version' => '0.3.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '3680c278f08748054b4ab3ea7855be8984f008aa',
+      'reference' => '204fd61ca81e3b0ba46c6165dab8f74816b1fe99',
+    ),
+    'rosell-dk/webp-convert' => 
+    array (
+      'pretty_version' => '2.4.0',
+      'version' => '2.4.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '187a578ee55730f7a128a2f07b4351524b10d47b',
     ),
     'roundcube/plugin-installer' => 
     array (
@@ -102,7 +111,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '61d1a37d8eed7724de2b5efdd404911d7fbba854',
+      'reference' => 'a152ceab171b3bd41cd98ae2d548e75567d50263',
     ),
   ),
 );
