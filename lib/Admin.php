@@ -75,7 +75,7 @@ class Admin {
                 case 'Export Product Variations':
                     $exporter = new ExportProducts();
                     break;
-                case 'Export Product Media':
+                case 'Export Images':
                     $exporter = new ExportMedia();
                     break;
                 case 'Export Orders':

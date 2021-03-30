@@ -93,7 +93,7 @@ class ExportMedia {
         
         $tmp = [];
         /**
-         * step 1 get all posts/pages/products and their image attachments (leave out zips/pdfs for now)
+         * step 1 get all posts/pages/products and their image attachments (leave out zips/pdfs for now) explicitly define jpg/png/gif to blacklist svg
          * @var array $images
          */
         $attachments = $wpdb->get_results("SELECT p.ID AS post_id,
@@ -112,7 +112,7 @@ class ExportMedia {
                attachment.post_mime_type AS image_type,
                alt.meta_value AS image_alt
         FROM   wp_posts AS p
-        JOIN wp_posts AS attachment ON (p.ID = attachment.post_parent AND attachment.post_type = 'attachment' AND attachment.post_mime_type LIKE 'image/%')
+        JOIN wp_posts AS attachment ON (p.ID = attachment.post_parent AND attachment.post_type = 'attachment' AND attachment.post_mime_type IN ('image/png','image/jpeg','image/gif'))
         LEFT JOIN wp_postmeta AS alt ON (alt.post_id = attachment.ID AND alt.meta_key = '_wp_attachment_image_alt')
         WHERE  p.post_type IN ( 'product', 'product_variation','post','page' );", ARRAY_A);
         
@@ -242,7 +242,7 @@ class ExportMedia {
             
             $fullpath = ABSPATH . $path;
             $to = str_replace($path_parts['extension'], 'webp', $fullpath);
-            if (!is_file($to)) {
+            if (!is_file($to) && strpos('_'.$image['type'], 'svg') === false) {
                 WebPConvert::convert($fullpath, $to, ['quality' => 75]);
             }
             

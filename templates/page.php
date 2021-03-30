@@ -26,7 +26,8 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
     <div class="content-tab" id="settings">
         <ul class="subsubsub">
             <li><a href="#customers" data-id="settings-customers" class="current">Customers & Guests</a> |</li>
-            <li><a href="#products" data-id="settings-products" class="disabled">Products</a> |</li>
+            <li><a href="#products" data-id="settings-assets">Assets</a> |</li>
+            <li><a href="#products" data-id="settings-products">Products</a> |</li>
             <li><a href="#orders" data-id="settings-orders" class="disabled" style="pointer-events: none;">Orders</a></li>
         </ul>
         <br class="clear">
@@ -138,7 +139,6 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                                 </td>
                                 <td>Breaks down the SQL Query into smaller chunks. If empty chunks of 5000 guest orders will be processed sequentially in order to reduce DB resources used.</td>
                             </tr>
-                            
                             <tr>
                                 <th scope="row">Guest Export Limit (optional)</th>
                                 <td>
@@ -146,7 +146,6 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                                 </td>
                                 <td>This allows you to define how many guests you want to export at once. If left empty, all guests will be exported. This might be required if you have many hundreds of thousands of orders.</td>
                             </tr>
-                            
                             <tr>
                                 <th scope="row">Guest Export Offest (optional)</th>
                                 <td>
@@ -167,7 +166,55 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                     </table>
                 </fieldset>
             </div>
-            
+            <div class="settings-tab" id="settings-assets" hidden="hidden">
+                <h2>Asset Settings</h2>
+                <p>The asset export does a couple of things: it looks into your posts, pages and WooCommerce products and finds featured images, gallery images. It then looks into the content and excerpt in order to find images in your HTML. Since Shopware supports webp image format, you have the option to generate webp versions of your images right away. Original JPGs and PNGs will be imported into the Originals media folder, post and page images will be imoported into your CMS media folder and Product images will be imported into the Product media folder.<br />
+                Since the product import only allows us to define one single cover image per product, we will import images into subfolders, named by their slug. This is supposed to make assigning product images easier. For the sake of simplicity, only image resources are handled here, no ZIP, or PDF, etc.
+                </p>
+                <fieldset>
+                    <table class="form-table" role="presentation">
+                        <thead>
+                            <tr>
+                                <th scope="col" width="25%">Setting</th>
+                                <th scope="col" width="35%">Value</th>
+                                <th scope="col" width="">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Prevent Duplicates</th>
+                                <td>
+                                    <input id="mediaPreventDups" name="mediaPreventDups" class="" type="checkbox" <?php if (json_decode(get_option(Plugin::SETTINGS_KEY), true)['mediaPreventDups'] === 'yes') { ?>checked="checked"<?php } ?> value="yes" />
+                                </td>
+                                <td><p class="description">If checked, this plugin will generate random unique IDs, store them in a new usermeta field with key <samp>shopware_exporter_random_id</samp>. This random ID is then used in the CSV file as autoIncrement ID. This allows you to re-import the same CSV file several times. Shopware will then update products instead of create duplicates. When activated, this plugin will automatically generate random unique IDs for newly created products.</p></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Post Media Parent Folder ID</th>
+                                <td>
+                                    <input id="postMediaFolderId" name="postMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['postMediaFolderId'] ?? ''; ?>"/>
+                                </td>
+                                <td><p class="description">Folder ID (32 character Uuid). Default folder for post and page images. (probably your CMS Media folder ID)</p></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Product Media Parent Folder ID</th>
+                                <td>
+                                    <input id="productMediaFolderId" name="productMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productMediaFolderId'] ?? ''; ?>"/>
+                                </td>
+                                <td><p class="description">Folder ID (32 character Uuid). Default folder for product images. (probably your CMS Media folder ID)</p></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td>
+                                    <input type="hidden" name="action" value="save" />
+                                    <input name="action" class="button button-secondary button-large" type="submit" value="Save Settings" />
+                                </td>
+                                <td><p class="description"></p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+            </div>
+                            
             <div class="settings-tab" id="settings-products" hidden="hidden">
                 <h2>Product Settings</h2>
                 <fieldset>
@@ -180,23 +227,6 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                             </tr>
                         </thead>
                         <tbody>
-                        
-                            <tr>
-                                <th scope="row">Post Media Parent Folder ID</th>
-                                <td>
-                                    <input id="postMediaFolderId" name="postMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['postMediaFolderId'] ?? ''; ?>"/>
-                                </td>
-                                <td><p class="description">Folder ID (32 character Uuid). Default folder for post and page images. (probably your CMS Media folder ID)</p></td>
-                            </tr>
-                            
-                            <tr>
-                                <th scope="row">Product Media Parent Folder ID</th>
-                                <td>
-                                    <input id="productMediaFolderId" name="productMediaFolderId" class="large-text" length="32" maxlength="32" type="text" value="<?php echo json_decode(get_option(Plugin::SETTINGS_KEY), true)['productMediaFolderId'] ?? ''; ?>"/>
-                                </td>
-                                <td><p class="description">Folder ID (32 character Uuid). Default folder for product images. (probably your CMS Media folder ID)</p></td>
-                            </tr>
-                            
                             <tr>
                                 <th scope="row">Include Product Drafts</th>
                                 <td>
@@ -376,9 +406,22 @@ use vardumper\Shopware_Six_Exporter\Admin\ExportProducts;
                 <table class="form-table" role="presentation">
                     <tbody>
                         <tr>
+                            <th scope="row">Product Assets</th>
+                            <td>
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Images" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+            
+            <fieldset>
+                <table class="form-table" role="presentation">
+                    <tbody>
+                        <tr>
                             <th scope="row">Product Export</th>
                             <td>
-                                <input name="action" class="button button-primary button-large" type="submit" value="Export Product Media" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Categories" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Attributes" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Simple Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Variable Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Variations" />
+                                <input name="action" class="button button-primary button-large" type="submit" value="Export Product Categories" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Attributes" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Simple Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Variable Products" />&nbsp;<input name="action" class="button button-primary button-large" type="submit" value="Export Product Variations" />
                             </td>
                         </tr>
                     </tbody>
